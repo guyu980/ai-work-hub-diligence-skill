@@ -104,11 +104,13 @@ Use $ai-work-hub-diligence. I agree we should stop active pursuit of this projec
 
 See [`examples/virtual-cases/README.zh-CN.md`](examples/virtual-cases/README.zh-CN.md).
 
-The examples are fictionalized and anonymized. They show three common paths:
+The examples are fictionalized and anonymized. They show five common paths:
 
 - BP looks promising, so continue diligence.
 - BP has insufficient evidence or material over-claims, so stop active pursuit.
 - BP looks promising, then multiple interviews and datapacks update the same running judgment.
+- Follow-up materials make valuation a conditional go/no-go question rather than a static first-screen concern.
+- A strong technical teaser requires benchmark scope checks, commercial proof, and valuation discipline.
 
 ## Feishu/Lark Setup
 
