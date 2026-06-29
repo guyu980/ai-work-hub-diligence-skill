@@ -52,6 +52,20 @@ Start a new Codex thread or reload Codex if the skill does not appear immediatel
 
 If cloning fails, check network access, GitHub availability, and whether Git is installed locally.
 
+Optional install check:
+
+```bash
+python3 ai-work-hub-diligence/scripts/check_install.py --workspace-root "$HOME/Documents/AI Work Hub"
+```
+
+If Feishu/Lark is already configured, also verify auth:
+
+```bash
+python3 ai-work-hub-diligence/scripts/check_install.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" \
+  --verify-feishu-auth
+```
+
 ## First Use
 
 Ask Codex to use the skill and provide a BP or Feishu/Lark link:
@@ -72,6 +86,28 @@ For an interview list:
 Use $ai-work-hub-diligence to prepare a founder interview question list for this project.
 ```
 
+For chat-only review without creating files:
+
+```text
+Use $ai-work-hub-diligence to review this BP. Do not create files; just tell me the judgment in chat.
+```
+
+To archive a passed project:
+
+```text
+Use $ai-work-hub-diligence. I agree this project is passed; archive the project folder.
+```
+
+## Virtual Examples
+
+See [`examples/virtual-cases/README.zh-CN.md`](examples/virtual-cases/README.zh-CN.md).
+
+The examples are fictionalized and anonymized. They show three common paths:
+
+- BP looks promising, so continue diligence.
+- BP is weak or over-claimed, so pass quickly.
+- BP looks promising, then multiple interviews and datapacks update the same running judgment.
+
 ## Feishu/Lark Setup
 
 See [`ai-work-hub-diligence/references/feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md).
@@ -86,7 +122,7 @@ After editing:
 
 ```bash
 git status
-git add ai-work-hub-diligence README.md .gitignore
+git add ai-work-hub-diligence examples README.md README.zh-CN.md LICENSE .gitignore
 git commit -m "Update diligence skill"
 git push
 ```
@@ -100,3 +136,16 @@ git pull
 ## Do Not Commit
 
 Do not commit local project materials, Feishu auth state, tokens, `.home`, `.tools`, `node_modules`, private deal notes, or user-specific local overrides.
+
+## Maintenance Notes
+
+- Put core workflow rules in `ai-work-hub-diligence/SKILL.md`.
+- Put Feishu/Lark CLI setup, permissions, and troubleshooting in `ai-work-hub-diligence/references/feishu-cli.md`.
+- Put install and sharing instructions in the repo README files, not inside the skill folder.
+- Put fictionalized onboarding examples in `examples/virtual-cases/`.
+- Keep real project materials, private notes, auth state, and credentials out of this repo.
+- After changing the skill, run the skill validator before pushing.
+
+## License
+
+MIT. See [`LICENSE`](LICENSE).

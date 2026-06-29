@@ -4,6 +4,8 @@
 .home/
 .tools/
 node_modules/
+__pycache__/
+*.pyc
 
 # Project materials should live in each user's workspace, not in the skill repo
 项目/
