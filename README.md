@@ -1,5 +1,7 @@
 # AI Work Hub Diligence Skill
 
+[中文说明](README.zh-CN.md)
+
 A Codex skill for iterative startup and project diligence.
 
 It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and follow-up materials into a running investment judgment, focused question lists, and an organized project folder.
