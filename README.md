@@ -14,7 +14,7 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Maintains one running project judgment and todo file.
 - Generates separate question-list files for each diligence round.
 - Performs lightweight public-information cross-checks.
-- Gives a crisp VC-style recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
+- Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
 - Archives passed projects after user confirmation.
 
 ## Install

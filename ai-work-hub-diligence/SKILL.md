@@ -129,7 +129,7 @@ When public evidence is thin, stale, inconsistent, or only company-stated, say s
 
 ## Decision Standard
 
-Default to a VC time-allocation lens. Lead with one of:
+Default to an investment time-allocation lens. Lead with one of:
 
 - `投`
 - `继续推进`
@@ -274,5 +274,5 @@ Before finishing, check:
 10. One running judgment/todo document is maintained for the active project.
 11. Each new question list is saved as a separate file when artifacts are generated.
 12. External-facing wording is polite and sendable.
-13. For VC screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
+13. For investment screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
 14. Passed projects are archived only after user confirmation.
