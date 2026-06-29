@@ -34,7 +34,7 @@ Use $ai-work-hub-diligence to review this teaser, create a project folder, and g
 
 ### 初步判断
 
-**继续推进；但只适合跟投 / 小额 option，不适合主导或重仓。**
+**继续推进；建议打法是跟投或小额 option，不适合主导或重仓。**
 
 这个项目方向和团队质量都很强，是真 AI-native 项目，值得继续接触。但当前证据还不够支持主导或重仓：技术领先主要来自榜单和公司口径，商业订单缺少客户侧证明，数据闭环和真实场景 ROI 仍需验证。
 
@@ -68,4 +68,4 @@ Use $ai-work-hub-diligence to review this teaser, create a project folder, and g
 - 强 teaser 不等于强证据。
 - 榜单必须拆到日期、track、metric 和可复现性。
 - 对技术项目也要追问商业订单、数据权利和单位经济性。
-- 当前判断可以是 `继续推进`，但参与方式和仓位要克制；后续是否加码取决于新增验证。
+- 当前判断可以是 `继续推进`，但建议打法要克制；后续是否加码取决于新增验证。

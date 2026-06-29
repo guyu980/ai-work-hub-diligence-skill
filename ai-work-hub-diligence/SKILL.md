@@ -173,13 +173,24 @@ If a project is only an adjacent or narrative fit for an explicitly AI-focused i
 
 Use `继续推进` when evidence is directionally attractive and the next diligence step can realistically confirm a live investment decision. Use `暂缓` only when a key blocker should stop normal deal-process time until resolved.
 
-When discussing deal participation, keep the wording simple and layered:
+When discussing deal participation, keep the conclusion to two layers:
 
 - **Investment judgment**: `投`, `继续推进`, `暂缓`, or `不投`.
-- **Participation mode**: `领投`, `跟投`, `小额 option`, or `仅观察`.
-- **Position size**: standard position, small position, or symbolic/small ticket.
+- **Recommended play**: combine role and sizing in one natural phrase.
 
-Example: `继续推进；建议跟投，小仓位。下一步重点验证客户回款和产品节点。`
+Use practical mappings:
+
+- `领投` / `共同领投`: only when conviction supports a main position; usually standard to heavy position.
+- `跟投`: can be standard or small position, depending on conviction, allocation, and round access.
+- `小额 option`: small or symbolic check only; use when the project is worth tracking but not ready for a main position.
+- `暂缓`: do not force role or sizing; state the missing signals that must be filled before resuming.
+
+Examples:
+
+- `投；建议领投或共同领投，标准仓位。`
+- `继续推进；建议跟投，小仓位。下一步重点验证客户回款和产品节点。`
+- `继续推进；仅保留小额 option，不做主仓位。`
+- `暂缓；先补客户回款、合同和产品复测信号。`
 
 ## Valuation Calibration
 
@@ -207,8 +218,7 @@ Recommended output when valuation matters:
 - 合理估值区间
 - 当前价格判断: 便宜 / 合理 / 偏贵 / 明显过贵
 - 投资判断: 投 / 继续推进 / 暂缓 / 不投
-- 参与方式: 领投 / 跟投 / 小额 option / 仅观察
-- 仓位建议: 标准仓位 / 小仓位 / 象征性小额
+- 建议打法: 领投或共同领投，标准仓位 / 跟投，小仓位 / 小额 option / 仅观察
 
 ## Workflow
 
