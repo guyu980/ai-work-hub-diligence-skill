@@ -15,4 +15,4 @@
 - [`case-02-bp-stop-pursuit.md`](case-02-bp-stop-pursuit.md)：BP 初筛后发现叙事过强、证据不足，建议不再推进。
 - [`case-03-iterative-followups.md`](case-03-iterative-followups.md)：BP 初筛具备推进价值，随后多轮访谈和材料更新，不断维护同一个判断文档。
 - [`case-04-valuation-refresh.md`](case-04-valuation-refresh.md)：初筛后补充多轮资料，估值判断从“偏贵”调整为“可条件推进”。
-- [`case-05-benchmark-cross-check.md`](case-05-benchmark-cross-check.md)：强技术 teaser 需要拆榜单口径、商业证明，并区分角色、仓位和 option 定位。
+- [`case-05-benchmark-cross-check.md`](case-05-benchmark-cross-check.md)：强技术 teaser 需要拆榜单口径、商业证明，并控制参与方式和仓位。
