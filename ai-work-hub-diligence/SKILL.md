@@ -90,8 +90,10 @@ Do not overwrite prior question lists.
 When the primary project name is clear, try to title the current Codex conversation:
 
 ```text
-Project [<项目名>]
+Project 项目名
 ```
+
+Use the most recognizable daily working name, not a legal name by default. Prefer the user's wording when supplied. If both English and Chinese names are available, use the version the team is most likely to search for later; a Chinese short name is fine when the full Chinese company name is too long.
 
 Use Codex thread-title tools when available. If the tool is unavailable, the current thread cannot be identified confidently, or the user asks not to rename the conversation, continue the diligence workflow without blocking.
 
@@ -289,5 +291,5 @@ Before finishing, check:
 11. Each new question list is saved as a separate file when artifacts are generated.
 12. External-facing wording is polite and sendable.
 13. For investment screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
-14. The Codex thread title is set to `Project [<项目名>]` when the project name is clear and thread-title tooling is available.
+14. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
 15. Passed projects are archived only after user confirmation.

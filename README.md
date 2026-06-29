@@ -9,7 +9,7 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 ## What It Does
 
 - Creates or locates a project folder from a BP, Feishu link, or other project material.
-- Attempts to title the Codex thread as `Project [project name]`.
+- Attempts to title the Codex thread as `Project project name`, using the most recognizable English, Chinese, or Chinese short name.
 - Archives source files and fetched Feishu content.
 - Reads Feishu smart minutes and tries to fetch the original transcript/content.
 - Maintains one running project judgment and todo file.
