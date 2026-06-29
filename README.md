@@ -92,10 +92,10 @@ For chat-only review without creating files:
 Use $ai-work-hub-diligence to review this BP. Do not create files; just tell me the judgment in chat.
 ```
 
-To archive a passed project:
+To archive a project the user has agreed not to pursue:
 
 ```text
-Use $ai-work-hub-diligence. I agree this project is passed; archive the project folder.
+Use $ai-work-hub-diligence. I agree we should stop active pursuit of this project; archive the project folder.
 ```
 
 ## Virtual Examples
@@ -105,7 +105,7 @@ See [`examples/virtual-cases/README.zh-CN.md`](examples/virtual-cases/README.zh-
 The examples are fictionalized and anonymized. They show three common paths:
 
 - BP looks promising, so continue diligence.
-- BP is weak or over-claimed, so pass quickly.
+- BP has insufficient evidence or material over-claims, so stop active pursuit.
 - BP looks promising, then multiple interviews and datapacks update the same running judgment.
 
 ## Feishu/Lark Setup
