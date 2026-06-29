@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, Codex thread title naming, an initial or updated investment view, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
+description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
 ---
 
 # AI Work Hub Diligence
@@ -175,6 +175,33 @@ Use `继续推进` when evidence is directionally attractive and the next dilige
 
 Treat `领投`, `跟投`, `小额option`, `小仓位`, and `分阶段投` as sizing or structure recommendations after the judgment, not as headline judgment categories.
 
+## Valuation Calibration
+
+Run valuation calibration when the material mentions financing amount, pre-money/post-money valuation, target ownership, entry price, revenue multiple, ARR, profit, order book, or when the user asks whether the price is attractive. Also run it when a project moves from initial screen to `继续推进` and enough operating data exists.
+
+Keep valuation light in early screens. Expand only when price is material to the decision or the user asks for it.
+
+Use three anchors:
+
+- **Public listed comps**: use relevant US, A-share, and Hong Kong listed companies when they match the real business model. Compare by revenue quality, growth, margin, retention, delivery model, cyclicality, and capital intensity, not by AI label alone.
+- **Private-market comps**: use recent same-sector or adjacent financing rounds when available, but treat them as noisy sanity checks unless source quality is strong.
+- **Company-specific reverse check**: calculate what the proposed valuation implies on current year and next year revenue/ARR/gross profit/profit/order backlog, and what operating milestones are required to justify the next round.
+
+For public-market multiples or recent private comps, use current sources when web access is available; valuation data is time-sensitive. If current data cannot be verified, state that the valuation calibration is directional.
+
+Avoid weak comps. Do not benchmark a project to OpenAI, Anthropic, Palantir, Nvidia, or a hot listed AI name unless the revenue model, defensibility, growth profile, and margin structure are genuinely comparable. If the company is project delivery, SI-like, hardware-heavy, government-resource driven, or channel-dependent, choose comps that reflect that reality.
+
+Recommended output when valuation matters:
+
+- 公司本轮估值 / 融资结构
+- 核心经营指标
+- 可比上市公司
+- 可比一级市场标的
+- 隐含倍数与反推
+- 合理估值区间
+- 当前价格判断: 便宜 / 合理 / 偏贵 / 明显过贵
+- 建议投资结构: 领投 / 跟投 / 小额 option / 分阶段投 / 暂缓 / 不投
+
 ## Workflow
 
 ### 1. Initial BP Review
@@ -189,6 +216,7 @@ When the user first sends a BP, teaser, deck, or early materials:
 6. Return:
    - 初步判断: lead with `投`, `继续推进`, `暂缓`, or `不投`.
    - 公开交叉验证: summarize the most important public signals and mismatches.
+   - 估值校准: include only when financing terms, valuation, or enough operating metrics are available.
    - 初步问题清单: around 6-10 core questions only.
    - 下一步建议: a small number of actions, including sizing or structure only after the investment judgment is clear.
 
@@ -202,9 +230,10 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 2. Read the new material from source.
 3. Record the core takeaways from this round.
 4. Refresh the public cross-check when the new material introduces new companies, founders, customers, technical claims, patents, papers, benchmarks, financing claims, or commercial claims.
-5. Update the same running project judgment/todo document.
-6. Explicitly state what changed versus the prior view.
-7. Keep current todo to 3-5 core items.
+5. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
+6. Update the same running project judgment/todo document.
+7. Explicitly state what changed versus the prior view.
+8. Keep current todo to 3-5 core items.
 
 Do not create a long todo list. Keep only actions that matter for deal progress.
 
@@ -291,5 +320,6 @@ Before finishing, check:
 11. Each new question list is saved as a separate file when artifacts are generated.
 12. External-facing wording is polite and sendable.
 13. For investment screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
-14. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
-15. Passed projects are archived only after user confirmation.
+14. Valuation-sensitive recommendations include a price view, relevant comps or reverse-check logic, and a clear statement of whether the proposed valuation is acceptable.
+15. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
+16. Passed projects are archived only after user confirmation.
