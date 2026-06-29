@@ -1,0 +1,30 @@
+.DS_Store
+
+# Local Feishu/Lark CLI state and dependencies
+.home/
+.tools/
+node_modules/
+
+# Project materials should live in each user's workspace, not in the skill repo
+项目/
+原始资料/
+解析文本/
+输出文档/
+归档/
+
+# Private local overrides
+ai-work-hub-diligence/references/local-private.md
+*.local.md
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*token*
+*secret*
+
+# Backups and generated noise
+*.backup
+*.bak
+*.tmp

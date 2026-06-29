@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Work Hub Diligence"
+  short_description: "Iterative diligence with Feishu intake"
+  default_prompt: "Use $ai-work-hub-diligence to set up a project folder, read the BP or Feishu links, update the running judgment, and prepare the next focused question list."
