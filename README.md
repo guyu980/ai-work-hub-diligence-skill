@@ -17,17 +17,23 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
 - Archives passed projects after user confirmation.
 
-## Install
+## Quick Install
 
-Clone this repo:
+Ask the repo owner for access first, because this repo is private.
+
+Clone the repo:
 
 ```bash
-git clone <repo-url>
+mkdir -p ~/Documents/skills-repos
+cd ~/Documents/skills-repos
+git clone https://github.com/guyu980/ai-work-hub-diligence-skill.git
+cd ai-work-hub-diligence-skill
 ```
 
 Link the skill into Codex:
 
 ```bash
+mkdir -p ~/.codex/skills
 ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
 ```
 
@@ -37,6 +43,14 @@ If a skill with that name already exists, back it up first:
 mv ~/.codex/skills/ai-work-hub-diligence ~/.codex/skills/ai-work-hub-diligence.backup
 ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
 ```
+
+Verify:
+
+```bash
+ls -la ~/.codex/skills/ai-work-hub-diligence
+```
+
+Start a new Codex thread or reload Codex if the skill does not appear immediately.
 
 ## First Use
 

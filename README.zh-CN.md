@@ -51,26 +51,72 @@
 2026-06-29_客户访谈问题清单.md
 ```
 
-## 安装
+## 安装说明
 
-Clone 这个 repo：
+通过 GitHub 安装很简单：拿到 repo 权限后，clone 到本地，再把 skill 文件夹软链到 Codex 的 `~/.codex/skills/` 目录即可。后续更新只需要 `git pull`。
+
+### 1. 申请 repo 权限
+
+这个 repo 当前是 private。第一次安装前，先让 repo owner 把你的 GitHub 账号加入访问权限。
+
+如果 clone 时报错 `Repository not found` 或权限不足，通常就是还没有 repo 权限，或者本机 GitHub 账号没有登录。
+
+### 2. Clone 到本地
 
 ```bash
-git clone <repo-url>
+mkdir -p ~/Documents/skills-repos
+cd ~/Documents/skills-repos
+git clone https://github.com/guyu980/ai-work-hub-diligence-skill.git
+cd ai-work-hub-diligence-skill
 ```
 
-把 skill 软链到 Codex 的 skills 目录：
+### 3. 软链到 Codex skills 目录
 
 ```bash
+mkdir -p ~/.codex/skills
 ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
 ```
 
-如果本地已经有同名 skill，先备份：
+如果本地已经有同名 skill，先备份旧版本：
 
 ```bash
 mv ~/.codex/skills/ai-work-hub-diligence ~/.codex/skills/ai-work-hub-diligence.backup
 ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
 ```
+
+### 4. 验证安装
+
+```bash
+ls -la ~/.codex/skills/ai-work-hub-diligence
+```
+
+如果看到它指向刚 clone 的 repo 目录，例如：
+
+```text
+~/.codex/skills/ai-work-hub-diligence -> ~/Documents/skills-repos/ai-work-hub-diligence-skill/ai-work-hub-diligence
+```
+
+说明安装成功。
+
+如果 Codex 没有立刻识别到这个 skill，可以新开一个 Codex 对话，或者重启/刷新 Codex。
+
+### 5. 后续更新
+
+进入 repo 目录后拉取最新版本：
+
+```bash
+cd ~/Documents/skills-repos/ai-work-hub-diligence-skill
+git pull
+```
+
+因为安装方式是软链，`git pull` 后 Codex 读到的就是最新版，不需要重新复制文件。
+
+### 6. 常见问题
+
+- `Repository not found`：确认 GitHub 账号已被加入 private repo 权限。
+- `Permission denied`：确认本机 GitHub 已登录，或使用 GitHub CLI 执行 `gh auth login`。
+- `File exists`：说明本地已有同名 skill，先备份或删除旧软链。
+- Codex 没识别：新开对话或刷新 Codex。
 
 ## 第一次使用
 
