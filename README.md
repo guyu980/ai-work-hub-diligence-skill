@@ -19,9 +19,7 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 
 ## Quick Install
 
-Ask the repo owner for access first, because this repo is private.
-
-Clone the repo:
+Clone the public repo:
 
 ```bash
 mkdir -p ~/Documents/skills-repos
@@ -51,6 +49,8 @@ ls -la ~/.codex/skills/ai-work-hub-diligence
 ```
 
 Start a new Codex thread or reload Codex if the skill does not appear immediately.
+
+If cloning fails, check network access, GitHub availability, and whether Git is installed locally.
 
 ## First Use
 
