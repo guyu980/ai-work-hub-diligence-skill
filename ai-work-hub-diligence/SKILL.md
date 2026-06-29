@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, an initial or updated investment view, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
+description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, Codex thread title naming, an initial or updated investment view, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
 ---
 
 # AI Work Hub Diligence
@@ -84,6 +84,18 @@ Create separate files for each question list, for example:
 ```
 
 Do not overwrite prior question lists.
+
+## Codex Thread Title
+
+When the primary project name is clear, try to title the current Codex conversation:
+
+```text
+Project [<项目名>]
+```
+
+Use Codex thread-title tools when available. If the tool is unavailable, the current thread cannot be identified confidently, or the user asks not to rename the conversation, continue the diligence workflow without blocking.
+
+Do not guess between multiple project names. Do not include judgment, valuation, customer names, financing terms, or other sensitive details in the thread title.
 
 ## Feishu Link Intake
 
@@ -277,4 +289,5 @@ Before finishing, check:
 11. Each new question list is saved as a separate file when artifacts are generated.
 12. External-facing wording is polite and sendable.
 13. For investment screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
-14. Passed projects are archived only after user confirmation.
+14. The Codex thread title is set to `Project [<项目名>]` when the project name is clear and thread-title tooling is available.
+15. Passed projects are archived only after user confirmation.
