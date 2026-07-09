@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
+description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, founder/core technical team background research, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
 ---
 
 # AI Work Hub Diligence
@@ -69,6 +69,7 @@ Recommended sections:
 - 项目核心逻辑
 - 已验证信息
 - 公开交叉验证
+- 团队技术背景与可信度
 - 主要疑点 / 风险
 - 交流纪要 takeaways
 - 当前核心 todo
@@ -122,7 +123,8 @@ For initial BP or preliminary materials:
 1. Read the exact source material before using public information.
 2. Identify what is company-stated, what is evidenced by data, and what is still an assumption.
 3. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
-4. Produce an initial judgment plus a short preliminary question list.
+4. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
+5. Produce an initial judgment plus a short preliminary question list.
 
 For later datapacks, models, or updates:
 
@@ -136,12 +138,40 @@ For later datapacks, models, or updates:
 Use public information as validation and calibration, not as a substitute for source reading. Look for:
 
 - Company basics: official site, registry/profile pages, financing history, product pages,备案/domain state, hiring pages, and historical positioning.
-- Founder/team: school and employer history, public bios, LinkedIn/Google Scholar/personal pages, GitHub, patents, papers, conference talks, and prior startups.
+- Founder/team: school and employer history, public bios, LinkedIn/Google Scholar/Semantic Scholar/DBLP/personal pages, GitHub/Hugging Face, patents, papers, conference talks, prior startups, and open-source contributions.
 - Technology proof: papers, arXiv, model cards, Hugging Face/GitHub repos, benchmarks, demos, patents, and reproducible evaluation details.
 - Commercial proof: customer announcements, case studies, procurement/tender records, customer press releases, app/store traffic, and evidence that logos represent real usage or paid contracts.
 - Industry calibration: comparable companies/products, mainstream technical route, customer purchasing behavior, pricing or cost benchmarks, and whether claimed growth or margin is plausible.
 
 When public evidence is thin, stale, inconsistent, or only company-stated, say so explicitly. Treat strong private claims such as `全球前三`, huge orders, top customer logos, famous-school/lab affiliations, or breakthrough model performance as verification items.
+
+## Technical Team Background
+
+For AI or deep-tech projects, treat identifiable technical leaders as a diligence input. Do this on the first interaction where the person is known, not only when the user explicitly asks.
+
+Trigger when materials mention a founder, co-founder, chief scientist, CTO, VP/R&D, algorithm lead, research lead, professor, lab PI, principal engineer, or similar core technical role. In later rounds, repeat the check when new core technical people are named.
+
+For each relevant person:
+
+1. Resolve identity carefully, especially for common Chinese names, English names, aliases, school profiles, and current/prior employer pages.
+2. Check public technical footprint: papers, patents, Google Scholar/Semantic Scholar/DBLP, arXiv, conference pages, GitHub, Hugging Face, Papers with Code, personal site, talks, prior startups, and major open-source or product contributions.
+3. Assess relevance to the company's claimed technical route, not just prestige. Note whether the work maps to the product, model, data pipeline, hardware stack, robotics/embodied AI, inference system, or other claimed moat.
+4. Distinguish evidence strength:
+   - `已核验`: public source supports the fact.
+   - `公司自述`: appears only in BP, teaser, minutes, or company materials.
+   - `仍需确认`: name ambiguity, unclear employment boundary, paper authorship ambiguity, weak link to product, or unclear full-time commitment.
+5. Look for red flags: decorative advisor risk, thin publication record relative to claims, stale or unrelated papers, no code footprint for code-heavy claims, employer/IP/non-compete overlap, exaggerated school/lab affiliation, or unclear role in prior work.
+
+Write findings into the same running judgment document under `团队技术背景与可信度`; do not create a separate background report unless the user asks. Keep it short:
+
+```text
+团队技术背景与可信度
+- 人员A: 已核验的教育/工作/论文/代码信号；与项目技术路线的相关性；仍需确认事项。
+- 人员B: ...
+- 对投资判断的影响: 上修 / 中性 / 下修，以及原因。
+```
+
+If web access or public sources are unavailable, state that the check was not completed and add it to current todo.
 
 ## Decision Standard
 
@@ -230,10 +260,12 @@ When the user first sends a BP, teaser, deck, or early materials:
 2. Archive the source material.
 3. Extract/read the source deeply enough to support a view.
 4. Run a lightweight public cross-check.
-5. Update the running judgment document if writing artifacts.
-6. Return:
+5. If technical founders or core technical people are identifiable, research their public technical background and update `团队技术背景与可信度`.
+6. Update the running judgment document if writing artifacts.
+7. Return:
    - 初步判断: lead with `投`, `继续推进`, `暂缓`, or `不投`.
    - 公开交叉验证: summarize the most important public signals and mismatches.
+   - 团队技术背景与可信度: include when technical founders or core technical people are identifiable.
    - 估值校准: include only when financing terms, valuation, or enough operating metrics are available.
    - 初步问题清单: around 6-10 core questions only.
    - 下一步建议: a small number of actions, including sizing or structure only after the investment judgment is clear.
@@ -248,10 +280,11 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 2. Read the new material from source.
 3. Record the core takeaways from this round.
 4. Refresh the public cross-check when the new material introduces new companies, founders, customers, technical claims, patents, papers, benchmarks, financing claims, or commercial claims.
-5. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
-6. Update the same running project judgment/todo document.
-7. Explicitly state what changed versus the prior view.
-8. Keep current todo to 3-5 core items.
+5. Refresh `团队技术背景与可信度` when the new material introduces new founders, chief scientists, CTOs, algorithm leads, research leads, or other core technical people.
+6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
+7. Update the same running project judgment/todo document.
+8. Explicitly state what changed versus the prior view.
+9. Keep current todo to 3-5 core items.
 
 Do not create a long todo list. Keep only actions that matter for deal progress.
 

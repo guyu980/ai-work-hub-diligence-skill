@@ -15,6 +15,7 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Maintains one running project judgment and todo file.
 - Generates separate question-list files for each diligence round.
 - Performs lightweight public-information cross-checks.
+- Researches identifiable technical founders, chief scientists, CTOs, algorithm leads, and other core technical people through public technical footprints such as papers, patents, GitHub, and Hugging Face, then keeps the assessment in the same running judgment file.
 - Calibrates valuation using relevant public listed comps, private-market comps, and company-specific reverse checks when price matters.
 - Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
 - Archives passed projects after user confirmation.
