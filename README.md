@@ -13,11 +13,13 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Archives source files and fetched Feishu content.
 - Reads Feishu smart minutes and tries to fetch the original transcript/content.
 - Maintains one running project judgment and todo file.
+- Connects the project to a local AI Work Hub Memory Graph when available, including similar projects, counterexamples, sector views, technical themes, and valuation anchors.
 - Generates separate question-list files for each diligence round.
 - Performs lightweight public-information cross-checks.
 - Researches identifiable technical founders, chief scientists, CTOs, algorithm leads, and other core technical people through public technical footprints such as papers, patents, GitHub, and Hugging Face, then keeps the assessment in the same running judgment file.
 - Calibrates valuation using relevant public listed comps, private-market comps, and company-specific reverse checks when price matters.
 - Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
+- Updates the local private Memory Graph project card after a project view changes, if the Memory Graph skill is installed and the user has not requested chat-only work.
 - Archives passed projects after user confirmation.
 
 ## Quick Install
@@ -68,6 +70,21 @@ python3 ai-work-hub-diligence/scripts/check_install.py \
   --workspace-root "$HOME/Documents/AI Work Hub" \
   --verify-feishu-auth
 ```
+
+## Optional Memory Graph Integration
+
+For cross-project recall, install the companion public skill:
+
+```bash
+cd ~/Documents/skills-repos
+git clone https://github.com/guyu980/ai-work-hub-memory-graph-skill.git
+cd ai-work-hub-memory-graph-skill
+ln -s "$(pwd)/ai-work-hub-memory-graph" ~/.codex/skills/ai-work-hub-memory-graph
+python3 ai-work-hub-memory-graph/scripts/init_memory_graph.py \
+  --workspace-root "$HOME/Documents/AI Work Hub"
+```
+
+The generated `Memory Graph/` folder is private and should not be uploaded to GitHub. It lets this diligence skill retrieve prior projects, sector views, technical themes, and valuation anchors before judging a new project, then update the project card after the view changes.
 
 ## First Use
 
@@ -149,6 +166,7 @@ Do not commit local project materials, Feishu auth state, tokens, `.home`, `.too
 - Put install and sharing instructions in the repo README files, not inside the skill folder.
 - Put fictionalized onboarding examples in `examples/virtual-cases/`.
 - Keep real project materials, private notes, auth state, and credentials out of this repo.
+- Keep generated `Memory Graph/` knowledge bases out of this repo; only reference the companion public skill.
 - After changing the skill, run the skill validator before pushing.
 
 ## License

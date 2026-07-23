@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, public-information cross-check, founder/core technical team background research, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
+description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, Memory Graph cross-project linkage, public-information cross-check, founder/core technical team background research, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
 ---
 
 # AI Work Hub Diligence
@@ -10,6 +10,8 @@ description: Use for iterative startup or project diligence when the user provid
 Treat this as a workflow, not a one-time judgment. A single BP, Feishu link, transcript, datapack, or project file should be enough to trigger the workflow: create or locate the project folder, archive the source, read the material, update the running judgment, and return a decision-oriented answer.
 
 Keep one running project judgment/todo document per active project. Update that document as new materials arrive. Do not create a new judgment document for every round unless the user explicitly asks for a separate memo. Create new files for question lists, interview prep, regenerated minutes, and external-facing deliverables.
+
+When a local AI Work Hub Memory Graph exists, use it as the cross-project knowledge layer: consult it before judging the project and update it after the view changes. The Memory Graph is a local private knowledge base and must not be committed to the public diligence skill repo.
 
 If the user explicitly says not to generate files, run the workflow in chat only and do not create or modify artifacts.
 
@@ -67,6 +69,7 @@ Recommended sections:
 
 - 当前一句话判断
 - 项目核心逻辑
+- Memory Graph 联想
 - 已验证信息
 - 公开交叉验证
 - 团队技术背景与可信度
@@ -122,16 +125,41 @@ For initial BP or preliminary materials:
 
 1. Read the exact source material before using public information.
 2. Identify what is company-stated, what is evidenced by data, and what is still an assumption.
-3. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
-4. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
-5. Produce an initial judgment plus a short preliminary question list.
+3. If `Memory Graph/` exists under the workspace root, search it for similar projects, counterexamples, sector maps, technical themes, and valuation anchors before final judgment.
+4. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
+5. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
+6. Produce an initial judgment plus a short preliminary question list.
+7. If writing artifacts, update or create a Memory Graph project card after the initial view is formed.
 
 For later datapacks, models, or updates:
 
 1. Inspect the relevant sheets, tables, transcripts, or appended materials.
 2. Extract only metrics that affect the investment judgment, such as revenue, users, customers, retention, gross margin, compute cost, backlog, pipeline, team, cap table, and scenario assumptions.
 3. Recalculate the view when new data contradicts the prior view.
-4. Update the same running judgment/todo document.
+4. Refresh Memory Graph linkage when the new material changes sector classification, comparable projects, technical themes, valuation anchors, or thesis implications.
+5. Update the same running judgment/todo document.
+6. If writing artifacts, update the Memory Graph project card and only update sector maps, technical themes, valuation anchors, or thesis entries when the new evidence changes reusable knowledge.
+
+## Memory Graph Linkage
+
+Use the `ai-work-hub-memory-graph` workflow when that skill is installed or when a local `Memory Graph/` exists.
+
+Before finalizing a project view, add a concise `Memory Graph 联想` section:
+
+```text
+Memory Graph 联想
+- 相似项目:
+- 反例项目:
+- 相关赛道/技术观点:
+- 估值锚点:
+- 这个项目必须证明的差异点:
+```
+
+Keep the section short. It should help the user remember prior work, not become a second memo.
+
+Use the taxonomy already present in the local Memory Graph. If no custom taxonomy exists, use the companion Memory Graph skill's default sectors as a starting point, but treat them as editable defaults rather than mandatory labels.
+
+Do not preserve very low-quality projects as first-class project cards unless they teach a reusable pattern.
 
 ## Public Cross-Check
 
@@ -264,6 +292,7 @@ When the user first sends a BP, teaser, deck, or early materials:
 6. Update the running judgment document if writing artifacts.
 7. Return:
    - 初步判断: lead with `投`, `继续推进`, `暂缓`, or `不投`.
+   - Memory Graph 联想: include similar projects, counterexamples, sector/technical views, and valuation anchors when available.
    - 公开交叉验证: summarize the most important public signals and mismatches.
    - 团队技术背景与可信度: include when technical founders or core technical people are identifiable.
    - 估值校准: include only when financing terms, valuation, or enough operating metrics are available.
@@ -282,9 +311,10 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 4. Refresh the public cross-check when the new material introduces new companies, founders, customers, technical claims, patents, papers, benchmarks, financing claims, or commercial claims.
 5. Refresh `团队技术背景与可信度` when the new material introduces new founders, chief scientists, CTOs, algorithm leads, research leads, or other core technical people.
 6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
-7. Update the same running project judgment/todo document.
-8. Explicitly state what changed versus the prior view.
-9. Keep current todo to 3-5 core items.
+7. Refresh Memory Graph project cards and cross-project linkage when the new material changes reusable knowledge.
+8. Update the same running project judgment/todo document.
+9. Explicitly state what changed versus the prior view.
+10. Keep current todo to 3-5 core items.
 
 Do not create a long todo list. Keep only actions that matter for deal progress.
 
@@ -374,3 +404,4 @@ Before finishing, check:
 14. Valuation-sensitive recommendations include a price view, relevant comps or reverse-check logic, and a clear statement of whether the proposed valuation is acceptable.
 15. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
 16. Passed projects are archived only after user confirmation.
+17. If a local Memory Graph exists, the project view includes cross-project linkage and the relevant project card is created or updated unless the user requested chat-only work.

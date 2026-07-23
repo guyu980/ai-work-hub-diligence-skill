@@ -13,11 +13,13 @@
 - 归档原始资料、飞书抓取内容和解析文本。
 - 读取飞书智能纪要，并尽量继续找到和读取原文/文字记录。
 - 维护同一个项目的运行中判断与 todo 文档。
+- 如果本地已安装 AI Work Hub Memory Graph，会在判断前检索相似项目、反例项目、赛道观点、技术主题和估值锚点。
 - 每轮单独生成问题清单，不覆盖历史问题清单。
 - 做轻量公开信息交叉验证。
 - 识别创始人、首席科学家、CTO、算法负责人等核心技术人员后，查询其学术/技术背景、论文、专利、GitHub/Hugging Face 等公开技术足迹，并持续更新在同一个项目判断文档中。
 - 在价格重要时，参考可比上市公司、一级市场标的和公司自身指标做估值校准。
 - 给出明确投资判断：`投`、`继续推进`、`暂缓`、`不投`。
+- 如果用户没有要求 chat-only，会在项目观点变化后更新本地私有 Memory Graph 项目卡片。
 - 用户确认不再推进后，将项目移动到归档文件夹。
 
 ## 推荐目录结构
@@ -112,6 +114,21 @@ python3 ai-work-hub-diligence/scripts/check_install.py \
   --workspace-root "$HOME/Documents/AI Work Hub" \
   --verify-feishu-auth
 ```
+
+## 可选：Memory Graph 联动
+
+如果希望实现跨项目联想和赛道认知沉淀，可以安装配套的公开 skill：
+
+```bash
+cd ~/Documents/skills-repos
+git clone https://github.com/guyu980/ai-work-hub-memory-graph-skill.git
+cd ai-work-hub-memory-graph-skill
+ln -s "$(pwd)/ai-work-hub-memory-graph" ~/.codex/skills/ai-work-hub-memory-graph
+python3 ai-work-hub-memory-graph/scripts/init_memory_graph.py \
+  --workspace-root "$HOME/Documents/AI Work Hub"
+```
+
+生成出来的 `Memory Graph/` 是本地私有知识库，不要上传到 GitHub。它用于让尽调 skill 在看新项目之前检索历史项目、赛道地图、技术主题和估值锚点，并在判断变化后更新项目卡片。
 
 ### 4. 后续更新
 
@@ -234,6 +251,7 @@ git pull
 - 脱敏示例放在 `examples/virtual-cases/`，且必须明确标注为虚拟案例。
 - 用户个人偏好可以放在本地私有文件，例如 `references/local-private.md`，并保持 `.gitignore` 忽略。
 - 如果后续新增模板，可以加 `references/output-templates.md`。
+- 生成出来的 `Memory Graph/` 知识库不要放进这个 repo；这里只引用配套公开 skill。
 - 改完 skill 后，先跑校验再 push。
 
 ## License
