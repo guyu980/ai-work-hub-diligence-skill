@@ -189,14 +189,14 @@ For initial BP or preliminary materials:
 6. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
 7. Produce an initial judgment plus a short preliminary question list.
 8. Update the project state JSON after the readable judgment is final.
-9. Emit a compact graph delta and sync the Memory Graph project card. Thesis/sector proposals remain review-only.
+9. Emit a compact graph delta and sync the Memory Graph project card. If the source contains a completed financing valuation, signed/in-closing valuation, current round quote, or next-round target, classify it and update the relevant valuation anchor when the destination and source label are clear; otherwise add a valuation proposal. Do not leave reusable market evidence only in the project card. Thesis/sector proposals remain review-only.
 
 For later datapacks, models, or updates:
 
 1. Inspect the relevant sheets, tables, transcripts, or appended materials.
 2. Extract only metrics that affect the investment judgment, such as revenue, users, customers, retention, gross margin, compute cost, backlog, pipeline, team, cap table, and scenario assumptions.
 3. Recalculate the view when new data contradicts the prior view.
-4. Refresh Memory Graph linkage when the new material changes sector classification, comparable projects, technical themes, valuation anchors, or thesis implications.
+4. Refresh Memory Graph linkage when the new material changes sector classification, comparable projects, technical themes, valuation anchors, or thesis implications. Completed financings should normally enter the relevant valuation anchor even when the project recommendation is `暂缓` or `不投`; current quotes and next-round targets remain useful lower-confidence references.
 5. Update the same running judgment/todo document.
 6. If writing artifacts, update the Memory Graph project card and only update sector maps, technical themes, valuation anchors, or thesis entries when the new evidence changes reusable knowledge.
 
@@ -322,6 +322,16 @@ Use three anchors:
 - **Private-market comps**: use recent same-sector or adjacent financing rounds when available, but treat them as noisy sanity checks unless source quality is strong.
 - **Company-specific reverse check**: calculate what the proposed valuation implies on current year and next year revenue/ARR/gross profit/profit/order backlog, and what operating milestones are required to justify the next round.
 
+Classify private-market valuation evidence before using or syncing it:
+
+- **已成交 / 已融到钱**: a completed or funded round is observed market-clearing evidence and should normally be captured in the relevant Memory Graph valuation anchor. Publicly verified completion is strongest; an explicit completed-round statement in private source material is still usable when labeled `材料已成交口径`.
+- **已签署 / 交割中**: signed or closing rounds are useful but must remain separate from completed financings until funds or completion are confirmed.
+- **在融报价**: the current pre-money/post-money quote is useful for price discipline and negotiation, but carries less weight than a completed financing.
+- **下一轮目标**: a planned future valuation is scenario evidence, not a transaction fact, and carries the lowest weight.
+- **内部公允值**: the analyst's reasonable valuation range is a conclusion, not market evidence. Keep it separate from all transaction and quote layers.
+
+Do not omit a completed financing from the valuation anchor merely because operating metrics are incomplete, the price looks aggressive, or the project is paused/passed. Record the market fact first, then discount its relevance or explain why it should not determine fair value. Preserve conflicting public and private valuations as separately sourced records rather than forcing a false single number.
+
 For public-market multiples or recent private comps, use current sources when web access is available; valuation data is time-sensitive. If current data cannot be verified, state that the valuation calibration is directional.
 
 Avoid weak comps. Do not benchmark a project to OpenAI, Anthropic, Palantir, Nvidia, or a hot listed AI name unless the revenue model, defensibility, growth profile, and margin structure are genuinely comparable. If the company is project delivery, SI-like, hardware-heavy, government-resource driven, or channel-dependent, choose comps that reflect that reality.
@@ -370,7 +380,7 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 3. Record the core takeaways from this round.
 4. Refresh the public cross-check when the new material introduces new companies, founders, customers, technical claims, patents, papers, benchmarks, financing claims, or commercial claims.
 5. Refresh `团队技术背景与可信度` when the new material introduces new founders, chief scientists, CTOs, algorithm leads, research leads, or other core technical people.
-6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
+6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size. Classify completed, signed/in-closing, current-quote, and next-target valuations separately and emit reusable valuation proposals.
 7. Refresh Memory Graph project cards and cross-project linkage when the new material changes reusable knowledge.
 8. Append new claim records to the evidence ledger; supersede prior claims explicitly rather than silently rewriting history.
 9. Update the same running project judgment/todo document and project state JSON.
@@ -470,4 +480,6 @@ Before finishing, check:
 18. The project state, evidence ledger, running judgment, and Memory Graph card do not contradict one another.
 19. Every material claim has a real source tier and source locator; migration-only records remain `legacy_migrated`.
 20. Generated Memory Graph indexes were rebuilt and validated rather than hand-edited.
-21. Historical reviews preserve the original outcome, distinguish decision-time evidence from hindsight, and can be reopened without erasing history.
+21. Completed or funded private-market valuations were captured in the relevant valuation anchor or explicitly queued for review; they were not omitted solely because the deal was unattractive or operating data was incomplete.
+22. Completed valuations, signed/in-closing rounds, current quotes, next-round targets, and internal fair-value conclusions are visibly separated and source-labeled.
+23. Historical reviews preserve the original outcome, distinguish decision-time evidence from hindsight, and can be reopened without erasing history.
