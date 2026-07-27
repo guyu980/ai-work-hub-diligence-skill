@@ -1,4 +1,4 @@
 interface:
   display_name: "AI Work Hub Diligence"
   short_description: "Source-first diligence with evidence lineage"
-  default_prompt: "Use $ai-work-hub-diligence to review a live or historical project, separate decision-time evidence from hindsight, update its running judgment and structured state, and sync the Memory Graph."
+  default_prompt: "Use $ai-work-hub-diligence to review a live or historical project, separate decision-time evidence from hindsight, update its running judgment and structured state, and sync completed valuations plus lower-confidence quotes to the Memory Graph separately from internal fair value."

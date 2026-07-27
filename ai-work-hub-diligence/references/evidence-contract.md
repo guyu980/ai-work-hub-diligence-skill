@@ -136,6 +136,7 @@ After each material diligence round, emit only reusable cross-project changes:
   "relations_add": [],
   "thesis_proposals": [],
   "sector_proposals": [],
+  "valuation_proposals": [],
   "event_triggers": []
 }
 ```
@@ -143,6 +144,14 @@ After each material diligence round, emit only reusable cross-project changes:
 Project-state and project-card updates may sync automatically. Thesis, sector,
 and externally triggered decision changes remain `needs_review` until a human or
 explicit diligence conclusion accepts them.
+
+Each `valuation_proposals` item should identify the project, sector anchor,
+valuation date, pre-money or post-money basis, currency and amount, financing
+status (`completed`, `signed_or_closing`, `current_quote`, or `next_round_target`),
+source tier, source path or URL, and a short relevance note. Completed financings
+are normally accepted as market-reference facts when source-labeled; quotes and
+targets remain lower-confidence references. Internal fair value is a separate
+analytical conclusion and should not be encoded as a financing status.
 
 ## Source Rules
 
