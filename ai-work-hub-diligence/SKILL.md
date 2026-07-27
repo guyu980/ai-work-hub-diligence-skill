@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for iterative startup or project diligence when the user provides a BP, teaser, datapack, model, Feishu/Lark document link, Feishu minutes link, transcript, interview note, public source, or any project-related material and expects automatic project-folder setup, source-first reading, Memory Graph cross-project linkage, public-information cross-check, founder/core technical team background research, Codex thread title naming, an initial or updated investment view, valuation calibration, short question lists, founder/team/customer/supplier interview prep, running judgment/todo maintenance, or archiving of passed projects.
+description: Use for live diligence or historical review of invested, passed, or previously screened startups when the user provides a BP, teaser, datapack, model, Feishu/Lark document or minutes link, transcript, interview note, public source, or other project material. Handles project-folder setup, source-first reading, claim-level evidence lineage, decision-time versus hindsight separation, Memory Graph linkage, public and core-team checks, Codex thread naming, initial or updated investment views, valuation calibration, focused interview questions, running judgment/state maintenance, follow-up reactivation, and confirmed pass archiving.
 ---
 
 # AI Work Hub Diligence
@@ -11,9 +11,57 @@ Treat this as a workflow, not a one-time judgment. A single BP, Feishu link, tra
 
 Keep one running project judgment/todo document per active project. Update that document as new materials arrive. Do not create a new judgment document for every round unless the user explicitly asks for a separate memo. Create new files for question lists, interview prep, regenerated minutes, and external-facing deliverables.
 
+Also keep one machine-readable project state and one append-only evidence ledger.
+Read `references/evidence-contract.md` before creating or updating them. The
+running judgment is the human decision document; the state JSON is the current
+machine-readable decision; the evidence ledger preserves claim provenance.
+
 When a local AI Work Hub Memory Graph exists, use it as the cross-project knowledge layer: consult it before judging the project and update it after the view changes. The Memory Graph is a local private knowledge base and must not be committed to the public diligence skill repo.
 
 If the user explicitly says not to generate files, run the workflow in chat only and do not create or modify artifacts.
+
+## Historical Project Review
+
+Trigger this mode when the user uploads prior deal materials for an already
+invested, passed, or previously screened project. Historical review uses the
+same folder, evidence ledger, structured state, Memory Graph card, and generated
+indexes as live diligence. It is not a separate archive that cannot re-enter
+the pipeline.
+
+Initialize with:
+
+```bash
+python3 <skill_dir>/scripts/init_historical_review.py \
+  --workspace-root "<workspace_root>" \
+  --project-name "<项目名>" \
+  --outcome invested|pass|unknown \
+  --decision-date "YYYY-MM-DD"
+```
+
+Use `--reopen` when a historical pass is now being reconsidered. Preserve
+`historical_outcome=pass`; update only the current project status, process stage,
+investment decision, play, sizing, price, and confidence.
+
+Historical review must keep two evidence timelines:
+
+1. `decision_time`: facts and claims available when the original investment or
+   pass decision was made.
+2. `post_outcome` or `current`: later operating results and new follow-up
+   evidence.
+
+The review document should cover:
+
+- 当时的信息集
+- 当时的投资判断与关键假设
+- 事后结果
+- 决策质量与结果质量（分开评价）
+- 当前重评
+- 可复用经验、反例和后续触发器
+
+Do not use hindsight to relabel weak original evidence as verified. Already
+invested projects normally enter monitoring. Historical pass projects normally
+live under `项目/归档/`, remain searchable as counterexamples, and may be
+reactivated without losing their original outcome.
 
 ## First Run Setup
 
@@ -46,7 +94,9 @@ When a new project material arrives:
 <workspace_root>/项目/<项目名>/
   原始资料/
   解析文本/
+    证据账本.jsonl
   输出文档/
+    <项目名>_项目状态.json
 ```
 
 4. Also ensure the archive container exists:
@@ -63,6 +113,14 @@ Use one running judgment file, preferably:
 
 ```text
 <workspace_root>/项目/<项目名>/输出文档/<项目名>_项目判断与todo.md
+```
+
+For a new project, initialize structured files with:
+
+```bash
+python3 <skill_dir>/scripts/init_project_state.py \
+  --workspace-root "<workspace_root>" \
+  --project-name "<项目名>"
 ```
 
 Recommended sections:
@@ -125,11 +183,13 @@ For initial BP or preliminary materials:
 
 1. Read the exact source material before using public information.
 2. Identify what is company-stated, what is evidenced by data, and what is still an assumption.
-3. If `Memory Graph/` exists under the workspace root, search it for similar projects, counterexamples, sector maps, technical themes, and valuation anchors before final judgment.
-4. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
-5. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
-6. Produce an initial judgment plus a short preliminary question list.
-7. If writing artifacts, update or create a Memory Graph project card after the initial view is formed.
+3. Record each decision-relevant claim in `解析文本/证据账本.jsonl` with an explicit evidence tier, verification status, decision impact, source path, and locator. Never promote a POC, logo, smart-minutes summary, or company metric beyond its actual source tier. For historical reviews, also set `temporal_scope=decision_time`, `post_outcome`, or `current`.
+4. If `Memory Graph/` exists under the workspace root, build a bounded context pack and inspect its source cards before final judgment.
+5. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
+6. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
+7. Produce an initial judgment plus a short preliminary question list.
+8. Update the project state JSON after the readable judgment is final.
+9. Emit a compact graph delta and sync the Memory Graph project card. Thesis/sector proposals remain review-only.
 
 For later datapacks, models, or updates:
 
@@ -312,9 +372,11 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 5. Refresh `团队技术背景与可信度` when the new material introduces new founders, chief scientists, CTOs, algorithm leads, research leads, or other core technical people.
 6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size.
 7. Refresh Memory Graph project cards and cross-project linkage when the new material changes reusable knowledge.
-8. Update the same running project judgment/todo document.
-9. Explicitly state what changed versus the prior view.
-10. Keep current todo to 3-5 core items.
+8. Append new claim records to the evidence ledger; supersede prior claims explicitly rather than silently rewriting history.
+9. Update the same running project judgment/todo document and project state JSON.
+10. Explicitly state what changed versus the prior view.
+11. Keep current todo to 3-5 core items.
+12. Sync the project card, rebuild indexes, and validate. Queue thesis, sector, and public-event changes for review.
 
 Do not create a long todo list. Keep only actions that matter for deal progress.
 
@@ -405,3 +467,7 @@ Before finishing, check:
 15. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
 16. Passed projects are archived only after user confirmation.
 17. If a local Memory Graph exists, the project view includes cross-project linkage and the relevant project card is created or updated unless the user requested chat-only work.
+18. The project state, evidence ledger, running judgment, and Memory Graph card do not contradict one another.
+19. Every material claim has a real source tier and source locator; migration-only records remain `legacy_migrated`.
+20. Generated Memory Graph indexes were rebuilt and validated rather than hand-edited.
+21. Historical reviews preserve the original outcome, distinguish decision-time evidence from hindsight, and can be reopened without erasing history.
