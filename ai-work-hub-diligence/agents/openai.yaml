@@ -1,4 +1,4 @@
 interface:
   display_name: "AI Work Hub Diligence"
-  short_description: "Iterative diligence with Feishu and team checks"
-  default_prompt: "Use $ai-work-hub-diligence to title the thread, set up a project folder, read the BP or Feishu links, verify public signals including technical team background when identifiable, update the running judgment, and prepare the next focused question list."
+  short_description: "Source-first diligence with evidence lineage"
+  default_prompt: "Use $ai-work-hub-diligence to review a live or historical project, separate decision-time evidence from hindsight, update its running judgment and structured state, and sync the Memory Graph."
