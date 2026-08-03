@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/context-package/v1.schema.json",
+  "title": "Context Package v1",
+  "type": "object",
+  "required": ["schema_version", "package_id", "package_type", "created_at", "created_by", "visibility", "object", "trigger", "source_refs"],
+  "properties": {
+    "schema_version": {"const": "context-package/v1"},
+    "package_id": {"type": "string", "minLength": 1},
+    "package_type": {"enum": ["new_context", "state_update", "workflow_output", "resource_update", "strategy_input", "graph_delta", "outcome"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "created_by": {
+      "type": "object",
+      "required": ["actor_type", "actor_id"],
+      "properties": {
+        "actor_type": {"enum": ["human", "agent", "automation"]},
+        "actor_id": {"type": "string", "minLength": 1},
+        "runtime": {"type": "string"},
+        "runtime_version": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "visibility": {"enum": ["organization", "organization_core", "project_team", "restricted"]},
+    "object": {
+      "type": "object",
+      "required": ["object_id", "object_type", "title"],
+      "properties": {
+        "object_id": {"type": "string", "minLength": 1},
+        "object_type": {"enum": ["project", "event", "report", "thesis", "person", "decision_snapshot", "capital_resource", "human_capital", "workflow"]},
+        "title": {"type": "string", "minLength": 1},
+        "aliases": {"type": "array", "items": {"type": "string"}},
+        "status": {"type": "string"},
+        "object_root": {"$ref": "#/$defs/locator"}
+      },
+      "additionalProperties": true
+    },
+    "trigger": {
+      "type": "object",
+      "required": ["trigger_type", "summary"],
+      "properties": {
+        "trigger_type": {"type": "string", "minLength": 1},
+        "summary": {"type": "string", "minLength": 1},
+        "occurred_at": {"type": "string", "format": "date-time"}
+      },
+      "additionalProperties": true
+    },
+    "source_refs": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/locator"}},
+    "artifacts": {"type": "array", "items": {"$ref": "#/$defs/artifact"}},
+    "current_state": {"type": "object"},
+    "workflow_outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["workflow_id", "workflow_version", "summary"],
+        "properties": {
+          "workflow_id": {"type": "string", "minLength": 1},
+          "workflow_version": {"type": "string", "minLength": 1},
+          "summary": {"type": "string", "minLength": 1},
+          "artifact_refs": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    },
+    "graph_delta": {"type": "object"},
+    "proposed_actions": {"type": "array", "items": {"type": "object"}},
+    "writeback": {"type": "object"}
+  },
+  "$defs": {
+    "locator": {
+      "type": "object",
+      "required": ["backend", "kind", "uri"],
+      "properties": {
+        "backend": {"enum": ["local", "feishu", "web", "other"]},
+        "kind": {"enum": ["file", "folder", "document", "base_record", "url"]},
+        "uri": {"type": "string", "minLength": 1},
+        "display_path": {"type": "string"},
+        "content_hash": {"type": "string"},
+        "last_verified_at": {"type": "string", "format": "date-time"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"backend": {"const": "local"}}, "required": ["backend"]},
+          "then": {
+            "properties": {
+              "uri": {
+                "not": {
+                  "anyOf": [
+                    {"pattern": "^/"},
+                    {"pattern": "^~[\\\\/]"},
+                    {"pattern": "^[A-Za-z]:[\\\\/]"},
+                    {"pattern": "(^|[\\\\/])\\.\\.([\\\\/]|$)"}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["artifact_id", "collection", "title", "locator"],
+      "properties": {
+        "artifact_id": {"type": "string", "minLength": 1},
+        "collection": {"enum": ["sources", "structured_context", "workflow_outputs", "actions_outcomes", "governance"]},
+        "title": {"type": "string", "minLength": 1},
+        "media_type": {"type": "string"},
+        "locator": {"$ref": "#/$defs/locator"},
+        "source_locator": {"$ref": "#/$defs/locator"}
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -3,6 +3,11 @@
 The project folder is the source of truth. The Memory Graph is a compiled,
 cross-project view. Generated indexes are caches and must be rebuildable.
 
+For non-local deployments, read `context-storage-contract.md`. The canonical
+project object is the source of truth, whether its locator resolves to a local
+folder or a Feishu object root. The state and evidence schemas do not change
+with the backend.
+
 ## Project State
 
 Keep one machine-readable state file beside the running judgment:
@@ -42,6 +47,9 @@ Required fields:
   "related_projects": [],
   "counterexamples": [],
   "source_refs": [],
+  "storage_profile": "local",
+  "object_root_ref": {},
+  "context_package_ref": "",
   "running_judgment_path": "",
   "evidence_ledger_path": "",
   "evidence_backfill_status": "complete",
@@ -65,6 +73,12 @@ Enums:
 
 Do not mix decision, role, sizing, and price into one enum. Keep
 `judgment_display` as the readable combined conclusion.
+
+`storage_profile`, `object_root_ref`, and `context_package_ref` are optional for
+legacy local projects. New cross-runtime or Feishu-compatible projects should
+populate them. Source references may be typed locators from
+`context-package/v1`; local projects may retain workspace-relative strings for
+backward compatibility.
 
 ## Evidence Ledger
 

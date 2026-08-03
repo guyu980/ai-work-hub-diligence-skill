@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for live diligence or historical review of invested, passed, or previously screened startups when the user provides a BP, teaser, datapack, model, Feishu/Lark document or minutes link, transcript, interview note, public source, or other project material. Handles project-folder setup, source-first reading, claim-level evidence lineage, decision-time versus hindsight separation, Memory Graph linkage, public and core-team checks, Codex thread naming, initial or updated investment views, valuation calibration, focused interview questions, running judgment/state maintenance, follow-up reactivation, and confirmed pass archiving.
+description: Use for live diligence or historical review of invested, passed, or previously screened startups when the user provides a BP, teaser, datapack, model, Feishu/Lark document or minutes link, transcript, interview note, public source, or other project material. Handles local or Feishu project-object setup, source-first reading, claim-level evidence lineage, decision-time versus hindsight separation, Memory Graph linkage, public and core-team checks, initial or updated investment views, valuation calibration, running judgment/state maintenance, portable Context Packages, follow-up reactivation, and confirmed pass archiving.
 ---
 
 # AI Work Hub Diligence
@@ -15,6 +15,11 @@ Also keep one machine-readable project state and one append-only evidence ledger
 Read `references/evidence-contract.md` before creating or updating them. The
 running judgment is the human decision document; the state JSON is the current
 machine-readable decision; the evidence ledger preserves claim provenance.
+
+Before writing, resolve `local`, `feishu`, or `hybrid` storage and read
+`references/context-storage-contract.md`. Reasoning and output schema stay the
+same; the adapter resolves logical collections, locators, permissions, and
+writeback. Existing local folders remain backward compatible.
 
 When a local AI Work Hub Memory Graph exists, use it as the cross-project knowledge layer: consult it before judging the project and update it after the view changes. The Memory Graph is a local private knowledge base and must not be committed to the public diligence skill repo.
 
@@ -65,7 +70,12 @@ reactivated without losing their original outcome.
 
 ## First Run Setup
 
-Before creating folders or writing artifacts in a new environment, confirm the user's workspace root. If a current workspace root is obvious, state it and ask for confirmation only when there is ambiguity. Use the confirmed root consistently.
+Before creating objects or writing artifacts in a new environment, identify the
+storage profile: `local`, `feishu`, or `hybrid`.
+
+For local mode, confirm the user's workspace root. If a current workspace root
+is obvious, state it and ask for confirmation only when there is ambiguity. Use
+the confirmed root consistently.
 
 Suggested default layout:
 
@@ -78,13 +88,17 @@ Suggested default layout:
 
 Do not hardcode a personal path. Ask: `你的项目工作区根目录放在哪里？例如 ~/Documents/AI Work Hub。`
 
+For Feishu mode, resolve the deployment manifest, object root, schema, identity,
+and permissions; never hardcode tenant IDs. For hybrid mode, declare one
+canonical write target and synchronization status.
+
 If Feishu/Lark links are part of the workflow and the CLI is not yet set up, read `references/feishu-cli.md` and guide the user through installation, login, scope checks, and permission fixes.
 
-If the user asks to verify a local installation, prefer running `scripts/check_install.py` from this skill folder before manual debugging.
+## Project Object Contract
 
-## Project Folder Contract
+### Local Profile
 
-When a new project material arrives:
+When new project material arrives in local mode:
 
 1. Infer the project name from the BP, file name, Feishu title, company name, or user wording.
 2. If the name is ambiguous, ask one short clarification before creating artifacts.
@@ -108,6 +122,9 @@ When a new project material arrives:
 5. Save original files or fetched Feishu exports into `原始资料/`.
 6. Save extracted text, OCR, Feishu smart minutes, original transcript, and public-source notes into `解析文本/`.
 7. Save the running judgment file and generated deliverables into `输出文档/`.
+
+Use the logical mapping in `references/context-storage-contract.md`.
+`actions_outcomes` and `governance` are created only when needed.
 
 Use one running judgment file, preferably:
 
@@ -147,35 +164,25 @@ Create separate files for each question list, for example:
 
 Do not overwrite prior question lists.
 
+### Feishu And Portable Writeback
+
+In Feishu mode, resolve one canonical project object. Keep full artifacts in
+Drive/Docs, searchable current state in Base, and claim-level evidence inside
+the object. For cross-runtime work, emit and validate `context-package/v1`;
+uploaded judgment remains sourced context, not formal authority.
+
 ## Codex Thread Title
 
-When the primary project name is clear, try to title the current Codex conversation:
-
-```text
-Project 项目名
-```
-
-Use the most recognizable daily working name, not a legal name by default. Prefer the user's wording when supplied. If both English and Chinese names are available, use the version the team is most likely to search for later; a Chinese short name is fine when the full Chinese company name is too long.
-
-Use Codex thread-title tools when available. If the tool is unavailable, the current thread cannot be identified confidently, or the user asks not to rename the conversation, continue the diligence workflow without blocking.
-
-Do not guess between multiple project names. Do not include judgment, valuation, customer names, financing terms, or other sensitive details in the thread title.
+When the project name is clear and tooling exists, title the conversation
+`Project 项目名` using the most recognizable working name. Do not guess or put
+judgment, valuation, customers, or financing terms in the title.
 
 ## Feishu Link Intake
 
-When the user provides a Feishu/Lark link, default to source-first reading. Do not rely only on the AI-generated smart minutes.
-
-Use the Feishu CLI workflow in `references/feishu-cli.md`.
-
-Minimum behavior:
-
-1. Fetch the provided link with user identity when possible.
-2. If it is a smart-minutes/minutes page, locate and fetch the original transcript or linked document.
-3. If the fetched document contains other Feishu links, follow the relevant links and save their contents too.
-4. Save both smart minutes and original transcript/content into `解析文本/`.
-5. State clearly if only smart minutes or only the original transcript could be accessed.
-
-Long Feishu materials should be saved locally first, then read from the local files to avoid truncation.
+Use `references/feishu-cli.md`. Fetch with user identity when possible; read
+smart minutes and the original transcript/content, follow relevant nested
+links, and preserve both in `structured_context`. State any access gap. In local
+mode, save long material before analysis to avoid truncation.
 
 ## Source Intake
 
@@ -190,6 +197,9 @@ For initial BP or preliminary materials:
 7. Produce an initial judgment plus a short preliminary question list.
 8. Update the project state JSON after the readable judgment is final.
 9. Emit a compact graph delta and sync the Memory Graph project card. If the source contains a completed financing valuation, signed/in-closing valuation, current round quote, or next-round target, classify it and update the relevant valuation anchor when the destination and source label are clear; otherwise add a valuation proposal. Do not leave reusable market evidence only in the project card. Thesis/sector proposals remain review-only.
+10. If the result must be shared across runtimes or written to Feishu, build a
+    `context-package/v1` containing the current state, source locators,
+    workflow artifacts, and graph delta. Validate it before writeback.
 
 For later datapacks, models, or updates:
 
@@ -199,6 +209,9 @@ For later datapacks, models, or updates:
 4. Refresh Memory Graph linkage when the new material changes sector classification, comparable projects, technical themes, valuation anchors, or thesis implications. Completed financings should normally enter the relevant valuation anchor even when the project recommendation is `暂缓` or `不投`; current quotes and next-round targets remain useful lower-confidence references.
 5. Update the same running judgment/todo document.
 6. If writing artifacts, update the Memory Graph project card and only update sector maps, technical themes, valuation anchors, or thesis entries when the new evidence changes reusable knowledge.
+7. For organization deployment, update the existing canonical object through a
+   new Context Package; do not create another project because a new file or
+   runtime appeared.
 
 ## Memory Graph Linkage
 
@@ -354,12 +367,12 @@ Recommended output when valuation matters:
 
 When the user first sends a BP, teaser, deck, or early materials:
 
-1. Create or locate the project folder unless the user says no files.
-2. Archive the source material.
+1. Create or locate the canonical project object unless the user says no files.
+2. Archive the source material in the `sources` collection.
 3. Extract/read the source deeply enough to support a view.
 4. Run a lightweight public cross-check.
 5. If technical founders or core technical people are identifiable, research their public technical background and update `团队技术背景与可信度`.
-6. Update the running judgment document if writing artifacts.
+6. Update the running judgment document in `workflow_outputs` if writing artifacts.
 7. Return:
    - 初步判断: lead with `投`, `继续推进`, `暂缓`, or `不投`.
    - Memory Graph 联想: include similar projects, counterexamples, sector/technical views, and valuation anchors when available.
@@ -368,8 +381,6 @@ When the user first sends a BP, teaser, deck, or early materials:
    - 估值校准: include only when financing terms, valuation, or enough operating metrics are available.
    - 初步问题清单: around 6-10 core questions only.
    - 下一步建议: a small number of actions, including sizing or structure only after the investment judgment is clear.
-
-Keep the first question list focused. Prioritize questions that decide whether the deal deserves more time.
 
 ### 2. Follow-Up Material Updates
 
@@ -387,8 +398,9 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 10. Explicitly state what changed versus the prior view.
 11. Keep current todo to 3-5 core items.
 12. Sync the project card, rebuild indexes, and validate. Queue thesis, sector, and public-event changes for review.
-
-Do not create a long todo list. Keep only actions that matter for deal progress.
+13. When crossing runtimes or writing to an organization system, emit and
+    validate a `context-package/v1`; write back only through the configured
+    adapter.
 
 ### 3. Interview Question Lists
 
@@ -460,8 +472,8 @@ For updates:
 
 Before finishing, check:
 
-1. The workspace root and project path are clear before writing artifacts.
-2. A new BP, Feishu link, or material created or located a project folder unless the user requested chat-only work.
+1. The storage profile, canonical write target, and object locator are clear before writing artifacts.
+2. A new BP, Feishu link, or material created or located a canonical project object unless the user requested chat-only work.
 3. The answer is grounded in the user's actual BP, datapack, Feishu content, or transcript.
 4. Feishu-linked work used both smart minutes and original content when possible.
 5. Relevant nested Feishu links were followed or listed as inaccessible.
@@ -483,3 +495,4 @@ Before finishing, check:
 21. Completed or funded private-market valuations were captured in the relevant valuation anchor or explicitly queued for review; they were not omitted solely because the deal was unattractive or operating data was incomplete.
 22. Completed valuations, signed/in-closing rounds, current quotes, next-round targets, and internal fair-value conclusions are visibly separated and source-labeled.
 23. Historical reviews preserve the original outcome, distinguish decision-time evidence from hindsight, and can be reopened without erasing history.
+24. Cross-runtime or organization writeback uses a validated `context-package/v1`, workspace-relative or typed Feishu locators, and the caller's existing permissions.

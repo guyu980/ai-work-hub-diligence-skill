@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-这是一个用于持续项目尽调的 Codex skill，适合公司内部做早期项目初筛、资料归档、飞书纪要读取、问题清单生成和多轮判断更新。
+这是一个用于持续项目尽调的 Codex skill，适合做早期项目初筛、资料归档、飞书纪要读取、问题清单生成和多轮判断更新。它既可以使用本地项目目录，也可以通过 Adapter 部署到获授权的飞书工作区。
 
 它不是一次性 memo 模板，而是一套工作流：用户每次丢进 BP、飞书链接、datapack、交流纪要、访谈原文或其他项目材料，Codex 都会围绕同一个项目文件夹持续更新判断。
 
@@ -21,6 +21,29 @@
 - 给出明确投资判断：`投`、`继续推进`、`暂缓`、`不投`。
 - 如果用户没有要求 chat-only，会在项目观点变化后更新本地私有 Memory Graph 项目卡片。
 - 用户确认不再推进后，将项目移动到归档文件夹。
+- 本地和飞书使用同一套语义结构，由 Adapter 处理路径、权限和回写差异。
+- 可以生成并校验 `context-package/v1`，供其他 Agent 或组织 Context 系统接收。
+
+## 存储方式
+
+- **Local：** 沿用 `原始资料 / 解析文本 / 输出文档`。
+- **Feishu：** 将相同 Logical Collections 映射到 Drive、Doc 和 Base。
+- **Hybrid：** 必须指定唯一 Canonical Write Target 和同步状态。
+
+公开 Skill 不硬编码任何公司的飞书 Token、Base ID 或个人绝对路径。详细契约见
+[`context-storage-contract.md`](ai-work-hub-diligence/references/context-storage-contract.md)。
+
+将本地项目导出为跨 Agent Package：
+
+```bash
+python3 ai-work-hub-diligence/scripts/build_context_package.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" \
+  --project-dir "$HOME/Documents/AI Work Hub/项目/Example" \
+  --trigger-summary "Diligence state updated" \
+  --output /tmp/example-context-package.json
+python3 ai-work-hub-diligence/scripts/validate_context_package.py \
+  /tmp/example-context-package.json
+```
 
 ## 推荐目录结构
 

@@ -20,23 +20,25 @@ npm install @larksuite/cli
 cd ..
 ```
 
-Use a workspace-local home directory when running the CLI:
+Use a workspace-local CLI configuration directory. Do not override the process
+`HOME`; the CLI also derives its encrypted credential-storage path from the
+real user home, and mixing the two modes can make a valid token appear missing:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli doctor
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli auth status --verify
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli doctor
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli auth status --verify
 ```
 
 If not logged in, start device login and ask the user to complete authorization:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli auth login --domain docs,drive,minutes,wiki,im
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli auth login --domain docs,drive,minutes,wiki,im
 ```
 
 If the workflow needs to create or update Feishu docs, also request document write capability:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli auth login --domain docs,drive,minutes,wiki,im,markdown
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli auth login --domain docs,drive,minutes,wiki,im,markdown
 ```
 
 If the CLI asks for app configuration, guide the user to provide the company-approved Lark app credentials or follow the organization's existing CLI setup. Do not invent app IDs, app secrets, or tokens.
@@ -46,15 +48,41 @@ If the CLI asks for app configuration, guide the user to provide the company-app
 Run:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli doctor
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli auth status --verify
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli doctor
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli auth status --verify
 ```
 
 For specific scopes, use:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli auth check --scope "<scope names>"
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli auth check --scope "<scope names>"
 ```
+
+### macOS credential-path preflight
+
+On macOS, app/profile configuration and encrypted credentials are separate:
+
+- profile/config: `<workspace_root>/.home/.lark-cli/config.json`
+- encrypted credentials: `<real_user_home>/Library/Application Support/lark-cli/`
+
+Older setups may have been created with an overridden `HOME`, leaving valid
+encrypted credentials under
+`<workspace_root>/.home/Library/Application Support/lark-cli/`. In that case,
+running with only `LARKSUITE_CLI_CONFIG_DIR` can report `no_token` even though
+the credential file still exists.
+
+Before asking the user to log in again:
+
+1. Confirm `config show` still identifies the expected app and user.
+2. Check both credential directories for the matching `.enc` file without
+   reading or printing its contents.
+3. If the legacy file exists and the real-user directory is empty, repair the
+   path with a secure link or migration and re-run `auth status --verify`.
+4. Re-login only when no usable encrypted credential remains or server
+   verification proves the refresh token is invalid.
+
+Treat a successful verified fetch as the final check. Do not infer that a
+missing token means the user changed the configuration.
 
 Common capability gaps:
 
@@ -71,19 +99,19 @@ Common capability gaps:
 Fetch by URL or token:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format pretty
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format pretty
 ```
 
 For machine-readable output:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format json
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format json
 ```
 
 Save long outputs into the project folder before analyzing:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format pretty > "项目/<项目名>/解析文本/<date>_飞书文档.md"
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<url>" --as user --format pretty > "项目/<项目名>/解析文本/<date>_飞书文档.md"
 ```
 
 ## Fetch Minutes And Original Transcript
@@ -103,7 +131,7 @@ When a link is a minutes/smart-minutes page:
 If the minutes cannot be fetched by document URL, try minutes search using the meeting title or known date:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli minutes +search --query "<meeting title or company>" --as user --format pretty
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli minutes +search --query "<meeting title or company>" --as user --format pretty
 ```
 
 Then use any returned document/minutes links or tokens to fetch the content.
@@ -131,14 +159,14 @@ This diligence workflow normally writes local Markdown first. Create or update F
 Use the installed CLI help to confirm the exact flags:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +create --help
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +update --help
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +create --help
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +update --help
 ```
 
 Some CLI versions reject unsupported flags such as `--format`, and document create/update may work more reliably when the Markdown path is relative to the workspace root. Prefer minimal flags and validate with:
 
 ```bash
-HOME="$PWD/.home" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<created doc url>" --as user --format pretty
+LARKSUITE_CLI_CONFIG_DIR="$PWD/.home/.lark-cli" ./.tools/node_modules/.bin/lark-cli docs +fetch --doc "<created doc url>" --as user --format pretty
 ```
 
 Do not claim a Feishu document was created or updated until fetch validation confirms the title/body are non-empty.
