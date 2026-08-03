@@ -4,7 +4,7 @@
 
 A Codex skill for iterative startup and project diligence.
 
-It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and follow-up materials into a running investment judgment, focused question lists, and an organized project folder.
+It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and follow-up materials into a running investment judgment, focused question lists, and an organized project object in local files or an authorized Feishu/Lark workspace.
 
 ## What It Does
 
@@ -21,6 +21,34 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
 - Updates the local private Memory Graph project card after a project view changes, if the Memory Graph skill is installed and the user has not requested chat-only work.
 - Archives passed projects after user confirmation.
+- Uses one semantic storage contract across local and Feishu deployments, with
+  backend-specific adapters for paths, permissions, and writeback.
+- Builds and validates portable `context-package/v1` files for cross-agent or
+  organization-context handoff.
+
+## Storage Profiles
+
+- **Local:** keeps the existing `原始资料 / 解析文本 / 输出文档` project layout.
+- **Feishu/Lark:** maps the same logical collections to Drive folders, Docs,
+  and Base records through a deployment manifest.
+- **Hybrid:** requires one declared canonical write target and synchronization
+  status.
+
+The public skill never hardcodes tenant-specific Feishu tokens, Base IDs, or a
+user's absolute path. See
+[`context-storage-contract.md`](ai-work-hub-diligence/references/context-storage-contract.md).
+
+To export a local project for another runtime:
+
+```bash
+python3 ai-work-hub-diligence/scripts/build_context_package.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" \
+  --project-dir "$HOME/Documents/AI Work Hub/项目/Example" \
+  --trigger-summary "Diligence state updated" \
+  --output /tmp/example-context-package.json
+python3 ai-work-hub-diligence/scripts/validate_context_package.py \
+  /tmp/example-context-package.json
+```
 
 ## Quick Install
 

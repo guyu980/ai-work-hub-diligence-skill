@@ -39,6 +39,10 @@ STATUSES = {
 }
 IMPACTS = {"high", "medium", "low"}
 TEMPORAL_SCOPES = {"decision_time", "post_outcome", "current", "unknown"}
+LOGICAL_COLLECTIONS = {
+    "sources", "structured_context", "workflow_outputs",
+    "actions_outcomes", "governance"
+}
 
 
 def main() -> int:
@@ -87,6 +91,36 @@ def main() -> int:
             )
         if not state.get("judgment_display"):
             errors.append("judgment_display is required")
+    manifest_candidates = list(
+        (project_dir / "输出文档").glob("*_context_object.json")
+    )
+    if len(manifest_candidates) > 1:
+        errors.append(
+            f"expected at most one context object manifest, found {len(manifest_candidates)}"
+        )
+    elif manifest_candidates:
+        try:
+            manifest = json.loads(
+                manifest_candidates[0].read_text(encoding="utf-8")
+            )
+        except json.JSONDecodeError as exc:
+            errors.append(f"invalid context object manifest: {exc}")
+            manifest = {}
+        if manifest:
+            if manifest.get("schema_version") != "context-object/v1":
+                errors.append("context object schema_version must be context-object/v1")
+            if manifest.get("object_type") != "project":
+                errors.append("context object object_type must be project")
+            collections = manifest.get("collections")
+            if not isinstance(collections, dict):
+                errors.append("context object collections must be an object")
+            else:
+                missing = LOGICAL_COLLECTIONS - set(collections)
+                if missing:
+                    errors.append(
+                        "context object missing logical collections: "
+                        + ", ".join(sorted(missing))
+                    )
     ledger = project_dir / "解析文本" / "证据账本.jsonl"
     if not ledger.exists():
         errors.append("missing evidence ledger")

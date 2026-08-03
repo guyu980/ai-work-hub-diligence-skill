@@ -116,20 +116,37 @@ def check_feishu(results: list[CheckResult], workspace_root: Path | None, verify
         return
 
     cli = lark_cli_path(workspace_root)
-    home = workspace_root / ".home"
+    config_dir = workspace_root / ".home" / ".lark-cli"
+    legacy_credential_dir = workspace_root / ".home" / "Library" / "Application Support" / "lark-cli"
+    user_credential_dir = Path.home() / "Library" / "Application Support" / "lark-cli"
     if cli.exists():
         add(results, "feishu cli", "ok", str(cli))
     else:
         add(results, "feishu cli", "warn", f"missing {cli}; install @larksuite/cli in <workspace_root>/.tools")
         return
 
-    if home.exists():
-        add(results, "feishu home", "ok", str(home))
+    if config_dir.exists():
+        add(results, "feishu config", "ok", str(config_dir))
     else:
-        add(results, "feishu home", "warn", f"missing {home}; login will create local auth state")
+        add(results, "feishu config", "warn", f"missing {config_dir}; login will create local profile state")
+
+    legacy_tokens = list(legacy_credential_dir.glob("*.enc")) if legacy_credential_dir.exists() else []
+    user_tokens = list(user_credential_dir.glob("*.enc")) if user_credential_dir.exists() else []
+    if legacy_tokens and not user_tokens:
+        add(
+            results,
+            "feishu credential path",
+            "warn",
+            "valid-looking encrypted credentials exist only under the legacy workspace-local home; "
+            "repair or link them into the real-user Application Support path before asking for re-login",
+        )
+    elif user_tokens:
+        add(results, "feishu credential path", "ok", str(user_credential_dir))
+    else:
+        add(results, "feishu credential path", "warn", "no encrypted user credential file found")
 
     env = os.environ.copy()
-    env["HOME"] = str(home)
+    env["LARKSUITE_CLI_CONFIG_DIR"] = str(config_dir)
 
     if verify_auth:
         code, out = run_command([str(cli), "auth", "status", "--verify"], cwd=workspace_root, env=env, timeout=30)
