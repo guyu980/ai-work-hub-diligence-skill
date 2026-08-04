@@ -2,7 +2,7 @@
 
 [English](README.md)
 
-这是一个用于持续项目尽调的 Codex skill，适合做早期项目初筛、资料归档、飞书纪要读取、问题清单生成和多轮判断更新。它既可以使用本地项目目录，也可以通过 Adapter 部署到获授权的飞书工作区。
+这是一个用于持续项目尽调的 Codex skill，适合做早期项目初筛、资料归档、飞书纪要读取、问题清单生成和多轮判断更新。默认使用本地项目目录；组织级飞书存储和跨 Agent 迁移是按需启用的高级能力。
 
 它不是一次性 memo 模板，而是一套工作流：用户每次丢进 BP、飞书链接、datapack、交流纪要、访谈原文或其他项目材料，Codex 都会围绕同一个项目文件夹持续更新判断。
 
@@ -21,19 +21,21 @@
 - 给出明确投资判断：`投`、`继续推进`、`暂缓`、`不投`。
 - 如果用户没有要求 chat-only，会在项目观点变化后更新本地私有 Memory Graph 项目卡片。
 - 用户确认不再推进后，将项目移动到归档文件夹。
-- 本地和飞书使用同一套语义结构，由 Adapter 处理路径、权限和回写差异。
-- 可以生成并校验 `context-package/v1`，供其他 Agent 或组织 Context 系统接收。
+- 只把影响判断、容易争议或未来需要复用的关键事实写入证据账本，不机械拆解每一句材料。
+- 普通估值判断记录公司/材料口径、融资额、日期、阶段和可比性；只有持股测算、交割风险、协议审阅或信息冲突时才深入核验交易细节。
+- 在明确要求组织部署、跨 Agent 移交或本地/飞书同步时，启用 Adapter 和 `context-package/v1`。
 
-## 存储方式
+## 默认存储与高级部署
 
-- **Local：** 沿用 `原始资料 / 解析文本 / 输出文档`。
-- **Feishu：** 将相同 Logical Collections 映射到 Drive、Doc 和 Base。
-- **Hybrid：** 必须指定唯一 Canonical Write Target 和同步状态。
+普通使用默认沿用本地 `原始资料 / 解析文本 / 输出文档`。读取飞书链接属于资料输入，不代表项目改为飞书存储。
 
-公开 Skill 不硬编码任何公司的飞书 Token、Base ID 或个人绝对路径。详细契约见
-[`context-storage-contract.md`](ai-work-hub-diligence/references/context-storage-contract.md)。
+只有用户明确要求把飞书作为 canonical storage、本地/飞书同步、跨 Agent 移交、Context Registry 或 bridge 时，才读取：
 
-将本地项目导出为跨 Agent Package：
+[`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md)
+
+公开 Skill 不硬编码任何公司的飞书 Token、Base ID 或个人绝对路径。
+
+高级模式下可将本地项目导出为跨 Agent Package：
 
 ```bash
 python3 ai-work-hub-diligence/scripts/build_context_package.py \
