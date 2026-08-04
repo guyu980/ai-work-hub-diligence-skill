@@ -23,7 +23,7 @@ COLLECTIONS = {
     "actions_outcomes", "governance"
 }
 OBJECT_TYPES = {
-    "project", "event", "report", "thesis", "person", "decision_snapshot",
+    "project", "sector", "technical_theme", "event", "report", "person", "decision_snapshot",
     "capital_resource", "human_capital", "workflow"
 }
 

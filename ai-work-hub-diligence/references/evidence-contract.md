@@ -152,16 +152,17 @@ change envelope:
   "schema_version": 2,
   "project": "<项目名>",
   "relations_add": [],
-  "thesis_proposals": [],
-  "sector_proposals": [],
-  "valuation_proposals": [],
-  "event_triggers": []
+  "sector_updates": [],
+  "technical_theme_updates": [],
+  "valuation_updates": [],
+  "event_triggers": [],
+  "person_updates": []
 }
 ```
 
 Project-state and project-card updates may sync automatically. Apply clear,
 source-backed reusable updates directly to their existing sector, technical,
-valuation, thesis, person, or event destination. Ordinary public news belongs
+valuation, person, or event destination. Ordinary public news belongs
 in the related project card's dated `外部动态` section and does not require a
 separate review-queue file.
 
