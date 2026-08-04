@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for live or historical investment diligence when the user provides a BP, teaser, datapack, financial model, Feishu/Lark link, transcript, meeting note, public source, or any project update. Creates or locates the project object, reads original evidence, maintains one evolving investment judgment and core todo, generates dated question lists or cleaned minutes when requested, checks relevant public and technical-team evidence, calibrates valuation when useful, links reusable learning to a private Memory Graph, and archives confirmed passes. Local storage is the default; organization deployment is optional.
+description: Use for live or historical investment diligence when the user provides a BP, teaser, datapack, financial model, Feishu/Lark link, transcript, meeting note, public source, or any project update. Creates or locates the project folder, reads original sources, maintains one evolving investment judgment and core todo, generates dated question lists or cleaned minutes when requested, checks relevant public and technical-team facts, calibrates valuation when useful, links reusable learning to a private Memory Graph, and archives confirmed passes.
 ---
 
 # AI Work Hub Diligence
@@ -14,14 +14,14 @@ Hard requirements:
 - One project has one running judgment/todo document. Update it in place.
 - New question lists, interview guides, and regenerated minutes are separate dated files.
 - Read the supplied material before public research. For Feishu minutes, read the original transcript/content as well as smart minutes.
-- Distinguish verified evidence, company/source claims, and unresolved items.
+- Distinguish verified facts, company/source claims, and unresolved items.
 - Lead with an investment view and the evidence that could change it.
 - Keep todo short and decision-relevant.
 - Use local project storage when a workspace exists. Feishu is an intake source unless the user explicitly requests organization storage.
 - Consult and update the private Memory Graph when it exists, but do not copy private graph content into this public skill repository.
 - If the user asks for chat-only work, do not create or modify files.
 
-Before writing structured state or evidence, read `references/evidence-contract.md`.
+Before writing structured state, read `references/project-state.md`.
 
 ## Route The Request
 
@@ -34,7 +34,6 @@ Before writing structured state or evidence, read `references/evidence-contract.
 | Regenerate minutes | Reconstruct questions and answers from the original transcript; summarize only where useful |
 | Historical invested or passed project | Follow `references/historical-review.md`; separate decision-time evidence from later outcomes |
 | Confirmed pass | Record reopen gates, move the project under `项目/归档/`, and keep it searchable |
-| Organization storage, bridge, or cross-agent handoff | Follow `references/advanced-deployment.md` |
 
 ## Resolve The Workspace And Project
 
@@ -48,7 +47,6 @@ Default local object:
     <项目名>/
       原始资料/
       解析文本/
-        证据账本.jsonl
       输出文档/
         <项目名>_项目判断与todo.md
         <项目名>_项目状态.json
@@ -71,20 +69,20 @@ Store originals or fetched exports in `原始资料/`; OCR, parsed text, transcr
 
 For every substantive project input:
 
-1. Locate the project and read the current judgment, state, focused evidence ledger, and latest relevant sources.
+1. Locate the project and read the current judgment, state, and latest relevant sources.
 2. Archive or fetch the new source. Read tables, appendices, original transcript, and relevant nested links when available.
 3. Identify what is genuinely new, what confirms the prior view, and what contradicts it.
 4. Run only the triggered checks: public facts, technical team, valuation, historical review, or transaction detail.
 5. Update the same running judgment and core todo. Add a short dated change log.
-6. Update the project state after the human-readable judgment is final. Record only high-impact, disputed, reusable, or high-stakes evidence.
+6. Update the project state after the human-readable judgment is final. Keep the few decision-relevant facts and source boundaries in the running judgment.
 7. Retrieve from and sync the Memory Graph when available; rebuild and validate its generated indexes.
 8. Reply with the current decision, why, what changed, and the few next actions that matter.
 
 Do not turn the workflow into source-by-source narration or exhaustive claim extraction.
 
-## Evidence And Source Discipline
+## Source Discipline
 
-Use these evidence labels in readable outputs:
+Use these source labels in readable outputs:
 
 - `已核验`: supported by original documents, customer confirmation, or reliable public evidence.
 - `公司/来源自述`: stated in a BP, datapack, minutes, founder/FA message, or unverified model.
@@ -190,10 +188,6 @@ Archive only after the user confirms the pass. Before moving the folder:
 - sync the Memory Graph if the project is worth preserving as a counterexample.
 
 Move the full project folder to `项目/归档/<项目名>/`. A later material update can reactivate it without erasing the original decision history.
-
-## Advanced Deployment
-
-Local mode is complete for ordinary diligence. Read `references/advanced-deployment.md` only when the user explicitly asks for canonical Feishu storage, organization-wide retrieval, local/Feishu synchronization, a Context Registry, a bridge, migration, or a portable Context Package.
 
 ## Completion Check
 

@@ -15,7 +15,7 @@
 - 可选连接本地私有的 AI Work Hub Memory Graph，调用历史项目和跨项目认知。
 - 用户确认不投后归档项目，并保留重新打开的条件。
 
-默认输出以投资决策为中心：`投`、`继续推进`、`暂缓`或`不投`，随后说明最重要的证据、风险和下一步。
+默认输出以投资决策为中心：`投`、`继续推进`、`暂缓`或`不投`，随后说明最重要的事实、风险和下一步。
 
 ## 默认工作流
 
@@ -113,10 +113,6 @@ python3 ai-work-hub-memory-graph-skill/ai-work-hub-memory-graph/scripts/init_mem
 ## 飞书设置
 
 公开 skill 不包含任何租户凭证。首次使用时，Codex 会按照 [`feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md) 完成 CLI 安装、用户登录、最小权限申请和目标文档读取验证。
-
-## 高级部署
-
-普通项目尽调只需要本地项目文件夹。只有明确需要组织共享存储、混合同步、bridge、Context Registry 或跨 Agent Context Package 时，才使用 [`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md)。
 
 ## 仓库边界
 

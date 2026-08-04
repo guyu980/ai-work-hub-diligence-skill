@@ -136,7 +136,6 @@ def main() -> int:
     state = json.loads(state_path.read_text(encoding="utf-8"))
     if args.outcome == "pass" and not args.reopen:
         state["project_status"] = "archived"
-    state["evidence_backfill_status"] = "pending"
     state["historical_review_path"] = (
         project_dir
         / "输出文档"
@@ -159,10 +158,7 @@ def main() -> int:
     )
     print(f"Historical review initialized: {project_dir}")
     print(f"Review document: {review_path}")
-    print(
-        "Record evidence with temporal_scope=decision_time or post_outcome "
-        "before forming the current reassessment."
-    )
+    print("Separate decision-time information from later outcomes in the review.")
     return 0
 
 

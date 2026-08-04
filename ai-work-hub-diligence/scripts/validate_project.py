@@ -30,21 +30,6 @@ ENUMS = {
     },
     "confidence": {"low", "medium", "high"},
 }
-TIERS = {
-    "contract_or_original", "customer_confirmed", "public_verified",
-    "company_claim", "inference", "legacy_migrated"
-}
-STATUSES = {
-    "confirmed", "partial", "unverified", "disputed", "stale", "superseded"
-}
-IMPACTS = {"high", "medium", "low"}
-TEMPORAL_SCOPES = {"decision_time", "post_outcome", "current", "unknown"}
-LOGICAL_COLLECTIONS = {
-    "sources", "structured_context", "workflow_outputs",
-    "actions_outcomes", "governance"
-}
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--project-dir", required=True)
@@ -54,7 +39,7 @@ def main() -> int:
     for name in ("原始资料", "解析文本", "输出文档"):
         if not (project_dir / name).is_dir():
             errors.append(f"missing directory: {name}")
-    state_candidates = list((project_dir / "输出文档").glob("*_项目状态.json"))
+    state_candidates = list((project_dir / "输出文档").rglob("*_项目状态.json"))
     if len(state_candidates) != 1:
         errors.append(f"expected one project state JSON, found {len(state_candidates)}")
         state = {}
@@ -91,72 +76,12 @@ def main() -> int:
             )
         if not state.get("judgment_display"):
             errors.append("judgment_display is required")
-    manifest_candidates = list(
-        (project_dir / "输出文档").glob("*_context_object.json")
-    )
-    if len(manifest_candidates) > 1:
-        errors.append(
-            f"expected at most one context object manifest, found {len(manifest_candidates)}"
-        )
-    elif manifest_candidates:
-        try:
-            manifest = json.loads(
-                manifest_candidates[0].read_text(encoding="utf-8")
-            )
-        except json.JSONDecodeError as exc:
-            errors.append(f"invalid context object manifest: {exc}")
-            manifest = {}
-        if manifest:
-            if manifest.get("schema_version") != "context-object/v1":
-                errors.append("context object schema_version must be context-object/v1")
-            if manifest.get("object_type") != "project":
-                errors.append("context object object_type must be project")
-            collections = manifest.get("collections")
-            if not isinstance(collections, dict):
-                errors.append("context object collections must be an object")
-            else:
-                missing = LOGICAL_COLLECTIONS - set(collections)
-                if missing:
-                    errors.append(
-                        "context object missing logical collections: "
-                        + ", ".join(sorted(missing))
-                    )
-    ledger = project_dir / "解析文本" / "证据账本.jsonl"
-    if not ledger.exists():
-        errors.append("missing evidence ledger")
-    else:
-        seen: set[str] = set()
-        for number, raw in enumerate(ledger.read_text(encoding="utf-8").splitlines(), 1):
-            if not raw.strip():
-                continue
-            try:
-                item = json.loads(raw)
-            except json.JSONDecodeError as exc:
-                errors.append(f"evidence line {number}: invalid JSON: {exc}")
-                continue
-            evidence_id = str(item.get("evidence_id", ""))
-            if not evidence_id or evidence_id in seen:
-                errors.append(f"evidence line {number}: missing/duplicate evidence_id")
-            seen.add(evidence_id)
-            if item.get("evidence_tier") not in TIERS:
-                errors.append(f"evidence line {number}: invalid evidence_tier")
-            if item.get("status") not in STATUSES:
-                errors.append(f"evidence line {number}: invalid status")
-            if item.get("decision_impact") not in IMPACTS:
-                errors.append(f"evidence line {number}: invalid decision_impact")
-            if item.get("temporal_scope") not in TEMPORAL_SCOPES:
-                errors.append(f"evidence line {number}: invalid temporal_scope")
-            if not item.get("source_refs"):
-                errors.append(f"evidence line {number}: source_refs is required")
     if errors:
         print(f"FAILED with {len(errors)} error(s)")
         for error in errors:
             print(f"- {error}")
         return 1
-    print(
-        f"OK: {project_dir.name}; "
-        f"{len(seen) if ledger.exists() else 0} evidence record(s)"
-    )
+    print(f"OK: {project_dir.name}")
     return 0
 
 

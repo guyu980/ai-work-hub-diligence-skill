@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialize schema-v2 diligence state and an evidence ledger."""
+"""Initialize a schema-v2 diligence project state."""
 
 from __future__ import annotations
 
@@ -83,8 +83,6 @@ def main() -> int:
     )
     for name in ("原始资料", "解析文本", "输出文档"):
         (project_dir / name).mkdir(parents=True, exist_ok=True)
-    evidence_path = project_dir / "解析文本" / "证据账本.jsonl"
-    evidence_path.touch(exist_ok=True)
     judgment_candidates = sorted(
         (project_dir / "输出文档").glob("*项目判断*todo*.md")
     )
@@ -92,17 +90,7 @@ def main() -> int:
     state_path = project_dir / "输出文档" / f"{args.project_name}_项目状态.json"
     if state_path.exists():
         raise SystemExit(f"Refusing to overwrite existing state: {state_path}")
-    actions_path = project_dir / "输出文档" / "行动与结果"
-    governance_path = project_dir / "输出文档" / "治理与确认"
-    object_manifest_path = (
-        project_dir / "输出文档" / f"{args.project_name}_context_object.json"
-    )
     today = str(date.today())
-    object_root_ref = {
-        "backend": "local",
-        "kind": "folder",
-        "uri": relative(project_dir, workspace_root),
-    }
     payload = {
         "schema_version": 2,
         "type": "project_state",
@@ -123,77 +111,17 @@ def main() -> int:
         "related_projects": [],
         "counterexamples": [],
         "source_refs": [],
-        "storage_profile": "local",
-        "object_root_ref": object_root_ref,
-        "object_manifest_path": relative(object_manifest_path, workspace_root),
-        "context_package_ref": "",
         "running_judgment_path": (
             relative(judgment_path, workspace_root) if judgment_path else ""
         ),
-        "evidence_ledger_path": relative(evidence_path, workspace_root),
-        "evidence_backfill_status": "complete",
         "created_at": today,
         "updated_at": today,
     }
-    object_manifest = {
-        "schema_version": "context-object/v1",
-        "object_id": payload["project_id"],
-        "object_type": "project",
-        "title": args.project_name,
-        "storage_profile": "local",
-        "canonical_write_target": object_root_ref,
-        "collections": {
-            "sources": {
-                "backend": "local",
-                "kind": "folder",
-                "uri": relative(project_dir / "原始资料", workspace_root),
-            },
-            "structured_context": {
-                "backend": "local",
-                "kind": "folder",
-                "uri": relative(project_dir / "解析文本", workspace_root),
-            },
-            "workflow_outputs": {
-                "backend": "local",
-                "kind": "folder",
-                "uri": relative(project_dir / "输出文档", workspace_root),
-            },
-            "actions_outcomes": {
-                "backend": "local",
-                "kind": "folder",
-                "uri": relative(actions_path, workspace_root),
-            },
-            "governance": {
-                "backend": "local",
-                "kind": "folder",
-                "uri": relative(governance_path, workspace_root),
-            },
-        },
-        "current_state_ref": {
-            "backend": "local",
-            "kind": "file",
-            "uri": relative(state_path, workspace_root),
-        },
-        "evidence_ledger_ref": {
-            "backend": "local",
-            "kind": "file",
-            "uri": relative(evidence_path, workspace_root),
-        },
-        "visibility": "restricted",
-        "created_at": today,
-        "updated_at": today,
-    }
-    object_manifest_path.write_text(
-        json.dumps(object_manifest, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
     state_path.write_text(
         json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     print(f"Initialized project state: {state_path}")
-    print(f"Context object manifest: {object_manifest_path}")
-    print(f"Evidence ledger: {evidence_path}")
     return 0
 
 

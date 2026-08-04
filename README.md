@@ -9,7 +9,7 @@ A Codex skill for continuous startup and investment diligence. Give it a BP, Fei
 - A consistent project folder with original sources, parsed text, and outputs.
 - One running investment judgment and core todo.
 - Separate dated question lists and cleaned meeting minutes.
-- Source labels that distinguish verified evidence, company claims, and open questions.
+- Source labels that distinguish verified facts, company claims, and open questions.
 - Public and technical-team checks when they can change the decision.
 - Practical valuation calibration using relevant listed and private comparables.
 - Retrieval from and writeback to the optional private AI Work Hub Memory Graph.
@@ -113,10 +113,6 @@ The generated `Memory Graph/` is private workspace data. Do not upload it to thi
 ## Feishu Setup
 
 The skill does not ship tenant credentials. On first use, Codex follows [`feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md) to install the CLI, authenticate the user, request the smallest required scopes, and verify the exact linked document.
-
-## Advanced Deployment
-
-Ordinary diligence needs only local project folders. Organization storage, hybrid synchronization, bridges, Context Registries, and portable Context Packages are documented in [`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md) and activate only when explicitly requested.
 
 ## Repository Boundary
 
