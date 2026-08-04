@@ -69,6 +69,22 @@ python3 ai-work-hub-diligence/scripts/check_install.py \
   --workspace-root "$HOME/Documents/AI Work Hub"
 ```
 
+Initialize or validate a workspace project:
+
+```bash
+python3 ai-work-hub-diligence/scripts/init_project_state.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" \
+  --project-name "Example" \
+  --sector "AI-native applications"
+python3 ai-work-hub-diligence/scripts/audit_workspace.py \
+  --workspace-root "$HOME/Documents/AI Work Hub"
+```
+
+For workspaces that also contain funds, system designs, or other non-company
+objects under `项目/`, list only those objects in `.ai-work-hub.json`. The audit
+still requires every included project to have the standard folders, one stable
+judgment, and one project state.
+
 ## Use It
 
 Initial review:

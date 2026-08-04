@@ -67,7 +67,7 @@ def main() -> int:
     )
     parser.add_argument("--decision-date", default="")
     parser.add_argument("--review-as-of", default=str(date.today()))
-    parser.add_argument("--sector", default="")
+    parser.add_argument("--sector", required=True)
     parser.add_argument("--project-dir")
     parser.add_argument(
         "--reopen",
@@ -136,17 +136,16 @@ def main() -> int:
     state = json.loads(state_path.read_text(encoding="utf-8"))
     if args.outcome == "pass" and not args.reopen:
         state["project_status"] = "archived"
-    state["historical_review_path"] = (
+    state["running_judgment_path"] = (
         project_dir
         / "输出文档"
-        / f"{args.review_as_of}_历史项目复盘.md"
+        / f"{args.project_name}_项目判断与todo.md"
     ).relative_to(workspace_root).as_posix()
-    state["running_judgment_path"] = state["historical_review_path"]
     state_path.write_text(
         json.dumps(state, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
-    review_path = workspace_root / state["historical_review_path"]
+    review_path = workspace_root / state["running_judgment_path"]
     review_path.write_text(
         REVIEW_TEMPLATE.format(
             name=args.project_name,

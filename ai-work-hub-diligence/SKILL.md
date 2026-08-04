@@ -60,8 +60,27 @@ Initialize structured files when needed:
 ```bash
 python3 <skill_dir>/scripts/init_project_state.py \
   --workspace-root "<workspace_root>" \
-  --project-name "<项目名>"
+  --project-name "<项目名>" \
+  --sector "<用户定义或默认主赛道>"
 ```
+
+The initializer creates the three standard folders, one stable running judgment,
+and one project state. It refuses to create a parallel judgment when a legacy
+non-canonical running file already exists; rename or merge that file first.
+
+For a mixed workspace, optional workspace settings live in
+`<workspace_root>/.ai-work-hub.json`:
+
+```json
+{
+  "schema_version": 1,
+  "exclude_project_dirs": ["funds", "system-design"],
+  "require_project_cards": false
+}
+```
+
+Use exclusions only for genuine non-company objects. Do not use them to hide an
+unfinished project migration.
 
 Store originals or fetched exports in `原始资料/`; OCR, parsed text, transcripts, and public checks in `解析文本/`; judgment and deliverables in `输出文档/`.
 
@@ -160,7 +179,7 @@ For regenerated minutes:
 
 If `<workspace_root>/Memory Graph/` exists, use the companion `ai-work-hub-memory-graph` workflow.
 
-Before finalizing, retrieve a compact context pack and inspect the source cards behind useful matches. Add only a short `Memory Graph 联想` section:
+Before finalizing, retrieve compact Memory Graph matches and inspect the source cards behind useful results. Add only a short `Memory Graph 联想` section:
 
 ```text
 - 相似项目:
@@ -201,3 +220,12 @@ Before declaring the round complete, verify:
 6. Any question list or minutes file is separate and dated.
 7. Memory Graph retrieval/writeback is complete when available, or the failure is stated.
 8. Confirmed passes were archived with reopen gates; historical reviews preserve time boundaries.
+9. Project and workspace validation passed:
+
+```bash
+python3 <skill_dir>/scripts/validate_project.py \
+  --workspace-root "<workspace_root>" \
+  --project-dir "<project_dir>"
+python3 <skill_dir>/scripts/audit_workspace.py \
+  --workspace-root "<workspace_root>"
+```

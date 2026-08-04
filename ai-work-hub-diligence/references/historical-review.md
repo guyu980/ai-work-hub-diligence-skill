@@ -8,6 +8,7 @@ Initialize when needed:
 python3 <skill_dir>/scripts/init_historical_review.py \
   --workspace-root "<workspace_root>" \
   --project-name "<项目名>" \
+  --sector "<用户定义或默认主赛道>" \
   --outcome invested|pass|unknown \
   --decision-date "YYYY-MM-DD"
 ```

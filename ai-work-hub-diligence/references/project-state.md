@@ -12,6 +12,15 @@ Keep one state file beside the running judgment:
 项目/<项目名>/输出文档/<项目名>_项目状态.json
 ```
 
+The running judgment path is equally stable:
+
+```text
+项目/<项目名>/输出文档/<项目名>_项目判断与todo.md
+```
+
+Do not put a date in the running filename. Dates belong in question lists,
+meeting minutes, source reviews, and the running document's change log.
+
 Required shape:
 
 ```json
@@ -65,6 +74,12 @@ Enums:
 
 Do not mix decision, role, sizing, and price into one enum. Keep
 `judgment_display` as the readable combined conclusion.
+Set `primary_sector` before validation and graph sync. The taxonomy is owned by
+the user; the public skill's default sectors are examples, not mandatory names.
+
+Retired migration fields such as `card_path`, `migration_status`, `hia`,
+`historical_review_path`, `evidence_ledger_path`, and `context_package_path`
+must not appear in current project state.
 
 ## Source Boundaries
 

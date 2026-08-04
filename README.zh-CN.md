@@ -69,6 +69,21 @@ python3 ai-work-hub-diligence/scripts/check_install.py \
   --workspace-root "$HOME/Documents/AI Work Hub"
 ```
 
+初始化项目或检查整个工作区：
+
+```bash
+python3 ai-work-hub-diligence/scripts/init_project_state.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" \
+  --project-name "示例项目" \
+  --sector "AI原生应用与工作流"
+python3 ai-work-hub-diligence/scripts/audit_workspace.py \
+  --workspace-root "$HOME/Documents/AI Work Hub"
+```
+
+如果 `项目/` 下还存放基金、系统设计等非公司对象，只把这些对象写入
+`.ai-work-hub.json` 的排除列表。审计仍会要求其余每个项目具备标准目录、
+唯一持续判断和唯一项目状态，排除项不能用来隐藏未迁移项目。
+
 ## 怎么使用
 
 首次看 BP：

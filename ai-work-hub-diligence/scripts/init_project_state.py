@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialize a schema-v2 diligence project state."""
+"""Initialize a diligence project with one stable judgment and state file."""
 
 from __future__ import annotations
 
@@ -33,6 +33,34 @@ ENUMS = {
 }
 
 
+JUDGMENT_TEMPLATE = """# {name} 项目判断与 todo
+
+最近更新：{today}
+
+## 当前一句话判断
+
+待阅读首批材料后填写。
+
+## 项目核心逻辑
+
+## 已核验信息
+
+## 公司/来源自述
+
+## 团队技术背景与可信度
+
+## 估值与融资
+
+## 主要风险与待核验
+
+## Memory Graph 联想
+
+## 当前核心 todo
+
+## 判断变化记录
+"""
+
+
 def relative(path: Path, root: Path) -> str:
     try:
         return path.relative_to(root).as_posix()
@@ -58,7 +86,14 @@ def main() -> int:
     parser.add_argument("--process-stage", default="screening")
     parser.add_argument("--confidence", default="medium")
     parser.add_argument("--judgment-display", default="观察")
+    parser.add_argument(
+        "--project-status",
+        choices=["active", "archived"],
+        help="Defaults from whether --project-dir is under 项目/归档/.",
+    )
     args = parser.parse_args()
+    if "/" in args.project_name or "\\" in args.project_name:
+        parser.error("project-name cannot contain path separators; use aliases")
     values = {
         "intake_mode": args.intake_mode,
         "historical_outcome": args.historical_outcome,
@@ -81,15 +116,35 @@ def main() -> int:
         if args.project_dir
         else workspace_root / "项目" / args.project_name
     )
+    inferred_archived = "归档" in project_dir.parts
+    values["project_status"] = (
+        args.project_status
+        or ("archived" if inferred_archived else "active")
+    )
+    if values["project_status"] == "archived":
+        values["process_stage"] = "archived"
     for name in ("原始资料", "解析文本", "输出文档"):
         (project_dir / name).mkdir(parents=True, exist_ok=True)
-    judgment_candidates = sorted(
-        (project_dir / "输出文档").glob("*项目判断*todo*.md")
-    )
-    judgment_path = judgment_candidates[0] if judgment_candidates else None
     state_path = project_dir / "输出文档" / f"{args.project_name}_项目状态.json"
     if state_path.exists():
         raise SystemExit(f"Refusing to overwrite existing state: {state_path}")
+    judgment_path = (
+        project_dir / "输出文档" / f"{args.project_name}_项目判断与todo.md"
+    )
+    if not judgment_path.exists():
+        legacy_candidates = sorted(
+            (project_dir / "输出文档").glob("*项目判断*todo*.md")
+        )
+        if legacy_candidates:
+            raise SystemExit(
+                "A non-canonical running judgment already exists; rename it "
+                f"to {judgment_path.name} before initialization: "
+                f"{legacy_candidates[0]}"
+            )
+        judgment_path.write_text(
+            JUDGMENT_TEMPLATE.format(name=args.project_name, today=str(date.today())),
+            encoding="utf-8",
+        )
     today = str(date.today())
     payload = {
         "schema_version": 2,
@@ -111,9 +166,7 @@ def main() -> int:
         "related_projects": [],
         "counterexamples": [],
         "source_refs": [],
-        "running_judgment_path": (
-            relative(judgment_path, workspace_root) if judgment_path else ""
-        ),
+        "running_judgment_path": relative(judgment_path, workspace_root),
         "created_at": today,
         "updated_at": today,
     }
