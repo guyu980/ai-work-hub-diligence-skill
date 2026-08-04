@@ -88,7 +88,9 @@ Keep append-only claim records in:
 项目/<项目名>/解析文本/证据账本.jsonl
 ```
 
-One line is one decision-relevant claim:
+One line is one judgment-changing, reusable, disputed, or high-stakes claim.
+Do not create ledger entries merely to restate every BP paragraph, meeting
+answer, or datapack field:
 
 ```json
 {
@@ -141,7 +143,9 @@ mark the old record `superseded` in a maintenance pass, and link the new
 
 ## Graph Delta
 
-After each material diligence round, emit only reusable cross-project changes:
+Use a graph delta only when a material diligence round adds reusable
+cross-project knowledge or when an advanced deployment handoff needs a portable
+change envelope:
 
 ```json
 {
@@ -155,17 +159,19 @@ After each material diligence round, emit only reusable cross-project changes:
 }
 ```
 
-Project-state and project-card updates may sync automatically. Thesis, sector,
-and externally triggered decision changes remain `needs_review` until a human or
-explicit diligence conclusion accepts them.
+Project-state and project-card updates may sync automatically. Apply clear,
+source-backed reusable updates directly to their existing sector, technical,
+valuation, thesis, person, or event destination. Ordinary public news belongs
+in the related project card's dated `外部动态` section and does not require a
+separate review-queue file.
 
-Each `valuation_proposals` item should identify the project, sector anchor,
-valuation date, pre-money or post-money basis, currency and amount, financing
-status (`completed`, `signed_or_closing`, `current_quote`, or `next_round_target`),
-source tier, source path or URL, and a short relevance note. Completed financings
-are normally accepted as market-reference facts when source-labeled; quotes and
-targets remain lower-confidence references. Internal fair value is a separate
-analytical conclusion and should not be encoded as a financing status.
+For normal valuation observations, record project, date, round/stage, stated
+valuation, financing amount, currency, source context, and a short comparability
+note. Transaction status, payment proof, special rights, and closing detail are
+optional and should be added only when they affect ownership, portfolio marking,
+return math, closing risk, legal rights, source conflict, or the investment
+decision. Keep internal fair value separate from observed or company-stated
+market price.
 
 ## Source Rules
 

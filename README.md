@@ -4,7 +4,7 @@
 
 A Codex skill for iterative startup and project diligence.
 
-It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and follow-up materials into a running investment judgment, focused question lists, and an organized project object in local files or an authorized Feishu/Lark workspace.
+It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and follow-up materials into a running investment judgment, focused question lists, and an organized local project object. Organization storage and cross-agent portability are optional advanced modes.
 
 ## What It Does
 
@@ -21,24 +21,17 @@ It turns BPs, Feishu/Lark links, meeting notes, datapacks, transcripts, and foll
 - Gives a crisp investment recommendation: `投`, `继续推进`, `暂缓`, or `不投`.
 - Updates the local private Memory Graph project card after a project view changes, if the Memory Graph skill is installed and the user has not requested chat-only work.
 - Archives passed projects after user confirmation.
-- Uses one semantic storage contract across local and Feishu deployments, with
-  backend-specific adapters for paths, permissions, and writeback.
-- Builds and validates portable `context-package/v1` files for cross-agent or
-  organization-context handoff.
+- Logs only judgment-changing, disputed, reusable, or high-stakes evidence instead of mechanically decomposing every source statement.
+- Keeps routine valuation capture light; transaction and closing verification is reserved for ownership, return, legal, conflict, or decision-sensitive cases.
+- Activates adapters and portable `context-package/v1` files only for explicit organization deployment or cross-agent handoff.
 
-## Storage Profiles
+## Default Storage And Advanced Deployment
 
-- **Local:** keeps the existing `原始资料 / 解析文本 / 输出文档` project layout.
-- **Feishu/Lark:** maps the same logical collections to Drive folders, Docs,
-  and Base records through a deployment manifest.
-- **Hybrid:** requires one declared canonical write target and synchronization
-  status.
+Normal use keeps the existing local `原始资料 / 解析文本 / 输出文档` layout. Reading a Feishu/Lark source link does not switch the project to Feishu storage.
 
-The public skill never hardcodes tenant-specific Feishu tokens, Base IDs, or a
-user's absolute path. See
-[`context-storage-contract.md`](ai-work-hub-diligence/references/context-storage-contract.md).
+Read [`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md) only when the user explicitly requests canonical Feishu storage, local/organization synchronization, cross-agent handoff, a Context Registry, migration, or a bridge. The public skill never hardcodes tenant-specific Feishu tokens, Base IDs, or a user's absolute path.
 
-To export a local project for another runtime:
+In advanced mode, export a local project for another runtime with:
 
 ```bash
 python3 ai-work-hub-diligence/scripts/build_context_package.py \

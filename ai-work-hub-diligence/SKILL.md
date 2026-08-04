@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for live diligence or historical review of invested, passed, or previously screened startups when the user provides a BP, teaser, datapack, model, Feishu/Lark document or minutes link, transcript, interview note, public source, or other project material. Handles local or Feishu project-object setup, source-first reading, claim-level evidence lineage, decision-time versus hindsight separation, Memory Graph linkage, public and core-team checks, initial or updated investment views, valuation calibration, running judgment/state maintenance, portable Context Packages, follow-up reactivation, and confirmed pass archiving.
+description: Use for live diligence or historical review of invested, passed, or previously screened startups when the user provides a BP, teaser, datapack, model, Feishu/Lark document or minutes link, transcript, interview note, public source, or other project material. Maintains one evolving investment judgment, focused evidence and todo, Memory Graph retrieval and reusable writeback, public and technical-team checks, practical valuation calibration, follow-up reactivation, and confirmed pass archiving. Local project storage is the default; organization deployment and portable Context Packages are optional advanced modes.
 ---
 
 # AI Work Hub Diligence
@@ -14,12 +14,16 @@ Keep one running project judgment/todo document per active project. Update that 
 Also keep one machine-readable project state and one append-only evidence ledger.
 Read `references/evidence-contract.md` before creating or updating them. The
 running judgment is the human decision document; the state JSON is the current
-machine-readable decision; the evidence ledger preserves claim provenance.
+machine-readable decision; the evidence ledger preserves only claims that
+materially affect the judgment, are likely to be disputed, or will matter in a
+later review. Do not turn routine source reading into exhaustive claim logging.
 
-Before writing, resolve `local`, `feishu`, or `hybrid` storage and read
-`references/context-storage-contract.md`. Reasoning and output schema stay the
-same; the adapter resolves logical collections, locators, permissions, and
-writeback. Existing local folders remain backward compatible.
+Use local project storage by default when a workspace root is available. Reading
+a Feishu/Lark link is source intake, not a reason to switch the project to
+Feishu storage. Only activate organization storage, hybrid synchronization, or
+portable Context Packages when the user explicitly asks for cross-runtime
+handoff, canonical Feishu writeback, a shared Context Registry, migration, or a
+bridge. Then read `references/advanced-deployment.md`.
 
 When a local AI Work Hub Memory Graph exists, use it as the cross-project knowledge layer: consult it before judging the project and update it after the view changes. The Memory Graph is a local private knowledge base and must not be committed to the public diligence skill repo.
 
@@ -70,12 +74,9 @@ reactivated without losing their original outcome.
 
 ## First Run Setup
 
-Before creating objects or writing artifacts in a new environment, identify the
-storage profile: `local`, `feishu`, or `hybrid`.
-
-For local mode, confirm the user's workspace root. If a current workspace root
-is obvious, state it and ask for confirmation only when there is ambiguity. Use
-the confirmed root consistently.
+Before creating objects or writing artifacts in a new environment, confirm the
+user's workspace root. If a current workspace root is obvious, use it and ask
+for confirmation only when there is ambiguity.
 
 Suggested default layout:
 
@@ -87,10 +88,6 @@ Suggested default layout:
 ```
 
 Do not hardcode a personal path. Ask: `你的项目工作区根目录放在哪里？例如 ~/Documents/AI Work Hub。`
-
-For Feishu mode, resolve the deployment manifest, object root, schema, identity,
-and permissions; never hardcode tenant IDs. For hybrid mode, declare one
-canonical write target and synchronization status.
 
 If Feishu/Lark links are part of the workflow and the CLI is not yet set up, read `references/feishu-cli.md` and guide the user through installation, login, scope checks, and permission fixes.
 
@@ -122,9 +119,6 @@ When new project material arrives in local mode:
 5. Save original files or fetched Feishu exports into `原始资料/`.
 6. Save extracted text, OCR, Feishu smart minutes, original transcript, and public-source notes into `解析文本/`.
 7. Save the running judgment file and generated deliverables into `输出文档/`.
-
-Use the logical mapping in `references/context-storage-contract.md`.
-`actions_outcomes` and `governance` are created only when needed.
 
 Use one running judgment file, preferably:
 
@@ -164,13 +158,6 @@ Create separate files for each question list, for example:
 
 Do not overwrite prior question lists.
 
-### Feishu And Portable Writeback
-
-In Feishu mode, resolve one canonical project object. Keep full artifacts in
-Drive/Docs, searchable current state in Base, and claim-level evidence inside
-the object. For cross-runtime work, emit and validate `context-package/v1`;
-uploaded judgment remains sourced context, not formal authority.
-
 ## Codex Thread Title
 
 When the project name is clear and tooling exists, title the conversation
@@ -181,8 +168,8 @@ judgment, valuation, customers, or financing terms in the title.
 
 Use `references/feishu-cli.md`. Fetch with user identity when possible; read
 smart minutes and the original transcript/content, follow relevant nested
-links, and preserve both in `structured_context`. State any access gap. In local
-mode, save long material before analysis to avoid truncation.
+links, and preserve both under `解析文本/`. State any access gap. Save long
+material before analysis to avoid truncation.
 
 ## Source Intake
 
@@ -190,28 +177,24 @@ For initial BP or preliminary materials:
 
 1. Read the exact source material before using public information.
 2. Identify what is company-stated, what is evidenced by data, and what is still an assumption.
-3. Record each decision-relevant claim in `解析文本/证据账本.jsonl` with an explicit evidence tier, verification status, decision impact, source path, and locator. Never promote a POC, logo, smart-minutes summary, or company metric beyond its actual source tier. For historical reviews, also set `temporal_scope=decision_time`, `post_outcome`, or `current`.
+3. Record only judgment-changing, reusable, disputed, or high-stakes claims in `解析文本/证据账本.jsonl`, with evidence tier, verification status, decision impact, source path, and locator. Never promote a POC, logo, smart-minutes summary, or company metric beyond its actual source tier. For historical reviews, also set `temporal_scope=decision_time`, `post_outcome`, or `current`.
 4. If `Memory Graph/` exists under the workspace root, build a bounded context pack and inspect its source cards before final judgment.
 5. When company, founder, product, customer, or technology names are identifiable, perform a lightweight public-information cross-check before final judgment.
 6. When a founder, chief scientist, CTO, algorithm lead, research lead, or other core technical person is identifiable, research that person's public technical background and update `团队技术背景与可信度` in the running judgment document.
 7. Produce an initial judgment plus a short preliminary question list.
 8. Update the project state JSON after the readable judgment is final.
-9. Emit a compact graph delta and sync the Memory Graph project card. If the source contains a completed financing valuation, signed/in-closing valuation, current round quote, or next-round target, classify it and update the relevant valuation anchor when the destination and source label are clear; otherwise add a valuation proposal. Do not leave reusable market evidence only in the project card. Thesis/sector proposals remain review-only.
-10. If the result must be shared across runtimes or written to Feishu, build a
-    `context-package/v1` containing the current state, source locators,
-    workflow artifacts, and graph delta. Validate it before writeback.
+9. Sync the Memory Graph project card. Update sector views, technical themes, valuation references, people cards, or major-event cards only when the round adds reusable knowledge beyond this project.
+10. When valuation is decision-useful, capture the company's or source's stated valuation, financing amount, date, round/stage, source, and a short comparability note. Do not seek agreements, payment proof, or closing details by default.
 
 For later datapacks, models, or updates:
 
 1. Inspect the relevant sheets, tables, transcripts, or appended materials.
 2. Extract only metrics that affect the investment judgment, such as revenue, users, customers, retention, gross margin, compute cost, backlog, pipeline, team, cap table, and scenario assumptions.
 3. Recalculate the view when new data contradicts the prior view.
-4. Refresh Memory Graph linkage when the new material changes sector classification, comparable projects, technical themes, valuation anchors, or thesis implications. Completed financings should normally enter the relevant valuation anchor even when the project recommendation is `暂缓` or `不投`; current quotes and next-round targets remain useful lower-confidence references.
+4. Refresh Memory Graph linkage when the new material changes comparable projects, sector or technical understanding, a useful valuation reference, a high-signal person, or a durable thesis.
 5. Update the same running judgment/todo document.
-6. If writing artifacts, update the Memory Graph project card and only update sector maps, technical themes, valuation anchors, or thesis entries when the new evidence changes reusable knowledge.
-7. For organization deployment, update the existing canonical object through a
-   new Context Package; do not create another project because a new file or
-   runtime appeared.
+6. If writing artifacts, update the Memory Graph project card and write only the reusable increment to higher-level graph files.
+7. If the user explicitly requests organization deployment or cross-runtime handoff, follow `references/advanced-deployment.md`.
 
 ## Memory Graph Linkage
 
@@ -335,15 +318,24 @@ Use three anchors:
 - **Private-market comps**: use recent same-sector or adjacent financing rounds when available, but treat them as noisy sanity checks unless source quality is strong.
 - **Company-specific reverse check**: calculate what the proposed valuation implies on current year and next year revenue/ARR/gross profit/profit/order backlog, and what operating milestones are required to justify the next round.
 
-Classify private-market valuation evidence before using or syncing it:
+For normal BP, interview, and datapack work, capture the valuation with a light
+default record:
 
-- **已成交 / 已融到钱**: a completed or funded round is observed market-clearing evidence and should normally be captured in the relevant Memory Graph valuation anchor. Publicly verified completion is strongest; an explicit completed-round statement in private source material is still usable when labeled `材料已成交口径`.
-- **已签署 / 交割中**: signed or closing rounds are useful but must remain separate from completed financings until funds or completion are confirmed.
-- **在融报价**: the current pre-money/post-money quote is useful for price discipline and negotiation, but carries less weight than a completed financing.
-- **下一轮目标**: a planned future valuation is scenario evidence, not a transaction fact, and carries the lowest weight.
-- **内部公允值**: the analyst's reasonable valuation range is a conclusion, not market evidence. Keep it separate from all transaction and quote layers.
+- project, date, round or operating stage;
+- stated pre-money or post-money valuation when known;
+- financing amount and currency when known;
+- source context such as company material, interview, FA material, public source, or transaction document;
+- a short comparability note tied to business model and operating maturity.
 
-Do not omit a completed financing from the valuation anchor merely because operating metrics are incomplete, the price looks aggressive, or the project is paused/passed. Record the market fact first, then discount its relevance or explain why it should not determine fair value. Preserve conflicting public and private valuations as separately sourced records rather than forcing a false single number.
+Do not seek agreements, payment proof,工商 changes, or exact closing status by
+default. Deepen transaction verification only when it changes ownership,
+portfolio marking, return math, closing risk, legal rights, or the investment
+decision; when sources materially conflict; or when the user explicitly asks
+for transaction or Cap Table review.
+
+Always keep the observed or company-stated market price separate from the
+internal fair-value view. A price can be a useful reference without being fair,
+fully verified, or suitable for the current project.
 
 For public-market multiples or recent private comps, use current sources when web access is available; valuation data is time-sensitive. If current data cannot be verified, state that the valuation calibration is directional.
 
@@ -367,12 +359,12 @@ Recommended output when valuation matters:
 
 When the user first sends a BP, teaser, deck, or early materials:
 
-1. Create or locate the canonical project object unless the user says no files.
-2. Archive the source material in the `sources` collection.
+1. Create or locate the local project folder unless the user says no files.
+2. Archive the source material under `原始资料/`.
 3. Extract/read the source deeply enough to support a view.
 4. Run a lightweight public cross-check.
 5. If technical founders or core technical people are identifiable, research their public technical background and update `团队技术背景与可信度`.
-6. Update the running judgment document in `workflow_outputs` if writing artifacts.
+6. Update the running judgment document under `输出文档/` if writing artifacts.
 7. Return:
    - 初步判断: lead with `投`, `继续推进`, `暂缓`, or `不投`.
    - Memory Graph 联想: include similar projects, counterexamples, sector/technical views, and valuation anchors when available.
@@ -391,16 +383,14 @@ When the user later provides a datapack, Feishu note, transcript, customer call,
 3. Record the core takeaways from this round.
 4. Refresh the public cross-check when the new material introduces new companies, founders, customers, technical claims, patents, papers, benchmarks, financing claims, or commercial claims.
 5. Refresh `团队技术背景与可信度` when the new material introduces new founders, chief scientists, CTOs, algorithm leads, research leads, or other core technical people.
-6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size. Classify completed, signed/in-closing, current-quote, and next-target valuations separately and emit reusable valuation proposals.
+6. Refresh valuation calibration when the new material changes revenue, ARR, profit, order backlog, growth certainty, valuation, round terms, or suggested investment size. Capture the stated market context without escalating to transaction verification unless a deep-verification trigger applies.
 7. Refresh Memory Graph project cards and cross-project linkage when the new material changes reusable knowledge.
-8. Append new claim records to the evidence ledger; supersede prior claims explicitly rather than silently rewriting history.
+8. Append only judgment-changing, disputed, reusable, or high-stakes claims to the evidence ledger; supersede prior high-impact claims explicitly rather than silently rewriting history.
 9. Update the same running project judgment/todo document and project state JSON.
 10. Explicitly state what changed versus the prior view.
 11. Keep current todo to 3-5 core items.
-12. Sync the project card, rebuild indexes, and validate. Queue thesis, sector, and public-event changes for review.
-13. When crossing runtimes or writing to an organization system, emit and
-    validate a `context-package/v1`; write back only through the configured
-    adapter.
+12. Sync the project card, apply any clear reusable Memory Graph changes to their existing destination, rebuild indexes, and validate.
+13. Use advanced deployment only when explicitly triggered.
 
 ### 3. Interview Question Lists
 
@@ -446,6 +436,22 @@ to:
 3. Leave active projects directly under `<workspace_root>/项目/`.
 4. In the final response, state the archive path.
 
+## Advanced Deployment
+
+Ordinary local diligence and Feishu-link reading do not require a storage
+profile decision or Context Package. Read `references/advanced-deployment.md`
+only when the user asks to:
+
+- make Feishu/Lark the canonical project store;
+- synchronize local and organization copies;
+- hand the project to another runtime or Agent;
+- connect a Codex-Feishu bridge or organization Context Registry;
+- migrate a project collection or Memory Graph; or
+- produce a formal portable writeback package.
+
+Keep organization IDs, permissions, locators, adapters, and Context Package
+validation out of the normal project path.
+
 ## Output Style
 
 For internal diligence:
@@ -472,27 +478,13 @@ For updates:
 
 Before finishing, check:
 
-1. The storage profile, canonical write target, and object locator are clear before writing artifacts.
-2. A new BP, Feishu link, or material created or located a canonical project object unless the user requested chat-only work.
-3. The answer is grounded in the user's actual BP, datapack, Feishu content, or transcript.
-4. Feishu-linked work used both smart minutes and original content when possible.
-5. Relevant nested Feishu links were followed or listed as inaccessible.
-6. Identifiable companies, founders, products, customers, technical claims, and industry positioning received a lightweight public cross-check when web access is available.
-7. The initial question list is not overbuilt.
-8. The latest judgment distinguishes prior view from updated view.
-9. The todo list is short and action-oriented.
-10. One running judgment/todo document is maintained for the active project.
-11. Each new question list is saved as a separate file when artifacts are generated.
-12. External-facing wording is polite and sendable.
-13. For investment screening, the answer gives a crisp recommendation and does not default to `继续看` when evidence already supports `不投 / move on`.
-14. Valuation-sensitive recommendations include a price view, relevant comps or reverse-check logic, and a clear statement of whether the proposed valuation is acceptable.
-15. The Codex thread title is set to `Project 项目名` when the project name is clear and thread-title tooling is available.
-16. Passed projects are archived only after user confirmation.
-17. If a local Memory Graph exists, the project view includes cross-project linkage and the relevant project card is created or updated unless the user requested chat-only work.
-18. The project state, evidence ledger, running judgment, and Memory Graph card do not contradict one another.
-19. Every material claim has a real source tier and source locator; migration-only records remain `legacy_migrated`.
-20. Generated Memory Graph indexes were rebuilt and validated rather than hand-edited.
-21. Completed or funded private-market valuations were captured in the relevant valuation anchor or explicitly queued for review; they were not omitted solely because the deal was unattractive or operating data was incomplete.
-22. Completed valuations, signed/in-closing rounds, current quotes, next-round targets, and internal fair-value conclusions are visibly separated and source-labeled.
-23. Historical reviews preserve the original outcome, distinguish decision-time evidence from hindsight, and can be reopened without erasing history.
-24. Cross-runtime or organization writeback uses a validated `context-package/v1`, workspace-relative or typed Feishu locators, and the caller's existing permissions.
+1. The answer is grounded in the actual BP, datapack, Feishu content, or transcript.
+2. Feishu-linked work used the original content as well as smart minutes when available, and relevant nested links were followed or reported inaccessible.
+3. The current judgment is explicit, distinguishes what changed, and keeps todo and initial questions short.
+4. One running judgment/todo document and one consistent project state are maintained.
+5. Public and technical-team checks focus on claims that can change the judgment.
+6. The evidence ledger contains the important provenance without exhaustively restating the source.
+7. Valuation-sensitive work separates the stated market price from the internal price view and uses deep transaction verification only when material.
+8. The Memory Graph project card is current; higher-level graph files contain only reusable increments, and generated indexes were rebuilt rather than hand-edited.
+9. Passed projects are archived only after user confirmation; historical reviews preserve decision-time versus later evidence.
+10. Advanced deployment is activated only by an explicit cross-runtime or organization-storage request and follows `references/advanced-deployment.md`.
