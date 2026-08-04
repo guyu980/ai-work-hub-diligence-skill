@@ -1,64 +1,38 @@
-# AI Work Hub 尽调 Skill
+# AI Work Hub 投资尽调 Skill
 
 [English](README.md)
 
-这是一个用于持续项目尽调的 Codex skill，适合做早期项目初筛、资料归档、飞书纪要读取、问题清单生成和多轮判断更新。默认使用本地项目目录；组织级飞书存储和跨 Agent 迁移是按需启用的高级能力。
+这是一个面向连续投资判断的 Codex skill。把 BP、飞书链接、datapack、访谈纪要、原文转录、财务模型或其他项目更新交给它，它会持续维护同一份项目判断，而不是每轮生成互相割裂的新结论。
 
-它不是一次性 memo 模板，而是一套工作流：用户每次丢进 BP、飞书链接、datapack、交流纪要、访谈原文或其他项目材料，Codex 都会围绕同一个项目文件夹持续更新判断。
+## 它会做什么
 
-## 它能做什么
+- 建立统一的项目文件夹，保存原始资料、解析文本和输出文档。
+- 维护一份持续更新的投资判断和核心 todo。
+- 每轮问题清单、访谈提纲和重整纪要单独生成带日期的文件。
+- 区分已核验信息、公司/来源自述和待核验事项。
+- 在可能改变判断时，查询公开信息和核心技术团队背景。
+- 在价格重要时，参考合适的美股、A 股、港股和一级市场可比。
+- 可选连接本地私有的 AI Work Hub Memory Graph，调用历史项目和跨项目认知。
+- 用户确认不投后归档项目，并保留重新打开的条件。
 
-- 根据 BP、飞书链接或项目材料创建/定位项目文件夹。
-- 尝试将 Codex 对话标题设为 `Project 项目名`，项目名可用英文、中文或中文简称。
-- 归档原始资料、飞书抓取内容和解析文本。
-- 读取飞书智能纪要，并尽量继续找到和读取原文/文字记录。
-- 维护同一个项目的运行中判断与 todo 文档。
-- 如果本地已安装 AI Work Hub Memory Graph，会在判断前检索相似项目、反例项目、赛道观点、技术主题和估值锚点。
-- 每轮单独生成问题清单，不覆盖历史问题清单。
-- 做轻量公开信息交叉验证。
-- 识别创始人、首席科学家、CTO、算法负责人等核心技术人员后，查询其学术/技术背景、论文、专利、GitHub/Hugging Face 等公开技术足迹，并持续更新在同一个项目判断文档中。
-- 在价格重要时，参考可比上市公司、一级市场标的和公司自身指标做估值校准。
-- 给出明确投资判断：`投`、`继续推进`、`暂缓`、`不投`。
-- 如果用户没有要求 chat-only，会在项目观点变化后更新本地私有 Memory Graph 项目卡片。
-- 用户确认不再推进后，将项目移动到归档文件夹。
-- 只把影响判断、容易争议或未来需要复用的关键事实写入证据账本，不机械拆解每一句材料。
-- 普通估值判断记录公司/材料口径、融资额、日期、阶段和可比性；只有持股测算、交割风险、协议审阅或信息冲突时才深入核验交易细节。
-- 在明确要求组织部署、跨 Agent 移交或本地/飞书同步时，启用 Adapter 和 `context-package/v1`。
+默认输出以投资决策为中心：`投`、`继续推进`、`暂缓`或`不投`，随后说明最重要的证据、风险和下一步。
 
-## 默认存储与高级部署
-
-普通使用默认沿用本地 `原始资料 / 解析文本 / 输出文档`。读取飞书链接属于资料输入，不代表项目改为飞书存储。
-
-只有用户明确要求把飞书作为 canonical storage、本地/飞书同步、跨 Agent 移交、Context Registry 或 bridge 时，才读取：
-
-[`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md)
-
-公开 Skill 不硬编码任何公司的飞书 Token、Base ID 或个人绝对路径。
-
-高级模式下可将本地项目导出为跨 Agent Package：
-
-```bash
-python3 ai-work-hub-diligence/scripts/build_context_package.py \
-  --workspace-root "$HOME/Documents/AI Work Hub" \
-  --project-dir "$HOME/Documents/AI Work Hub/项目/Example" \
-  --trigger-summary "Diligence state updated" \
-  --output /tmp/example-context-package.json
-python3 ai-work-hub-diligence/scripts/validate_context_package.py \
-  /tmp/example-context-package.json
-```
-
-## 推荐目录结构
-
-首次使用时，skill 会先确认用户自己的工作区根目录，例如：
+## 默认工作流
 
 ```text
-~/Documents/AI Work Hub
+收到新材料
+  -> 找到或创建项目
+  -> 归档并阅读原文
+  -> 与当前判断比较
+  -> 按需做公开、团队、估值检查
+  -> 更新同一份判断和核心 todo
+  -> 将可复用增量同步到 Memory Graph
 ```
 
-项目目录建议为：
+默认本地结构：
 
 ```text
-<workspace_root>/
+<工作区根目录>/
   项目/
     <项目名>/
       原始资料/
@@ -67,218 +41,87 @@ python3 ai-work-hub-diligence/scripts/validate_context_package.py \
     归档/
 ```
 
-每个 active 项目会维护一个主判断文档，例如：
+飞书通常只是资料入口，不会因为读取链接就切换到飞书存储。读取会议纪要时，在权限允许的情况下同时读取智能纪要和原文转录；发生冲突时，以原文为准。
 
-```text
-<workspace_root>/项目/<项目名>/输出文档/<项目名>_项目判断与todo.md
-```
-
-问题清单会每轮单独生成，例如：
-
-```text
-2026-06-29_初步问题清单.md
-2026-06-29_创始人访谈问题清单.md
-2026-06-29_客户访谈问题清单.md
-```
-
-## 安装说明
-
-通过 GitHub 安装很简单：直接 clone 这个 public repo 到本地，再把 skill 文件夹软链到 Codex 的 `~/.codex/skills/` 目录即可。后续更新只需要 `git pull`。
-
-### 1. Clone 到本地
-
-这个 repo 是公开的，不需要单独申请权限：
+## 通过 GitHub 安装
 
 ```bash
-mkdir -p ~/Documents/skills-repos
+mkdir -p ~/Documents/skills-repos ~/.codex/skills
 cd ~/Documents/skills-repos
 git clone https://github.com/guyu980/ai-work-hub-diligence-skill.git
-cd ai-work-hub-diligence-skill
+ln -s "$(pwd)/ai-work-hub-diligence-skill/ai-work-hub-diligence" \
+  ~/.codex/skills/ai-work-hub-diligence
 ```
 
-### 2. 软链到 Codex skills 目录
+如果目标路径已经存在，先确认它是旧副本、备份还是符号链接，再决定如何替换。采用 Git clone 加符号链接后，更新只需要：
 
 ```bash
-mkdir -p ~/.codex/skills
-ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
+cd ~/Documents/skills-repos/ai-work-hub-diligence-skill
+git pull --ff-only
 ```
 
-如果本地已经有同名 skill，先备份旧版本：
+如果 Codex 没有立即显示该 skill，重新加载或重启 Codex。
 
-```bash
-mv ~/.codex/skills/ai-work-hub-diligence ~/.codex/skills/ai-work-hub-diligence.backup
-ln -s "$(pwd)/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
-```
-
-### 3. 验证安装
-
-```bash
-ls -la ~/.codex/skills/ai-work-hub-diligence
-```
-
-如果看到它指向刚 clone 的 repo 目录，例如：
-
-```text
-~/.codex/skills/ai-work-hub-diligence -> ~/Documents/skills-repos/ai-work-hub-diligence-skill/ai-work-hub-diligence
-```
-
-说明安装成功。
-
-如果 Codex 没有立刻识别到这个 skill，可以新开一个 Codex 对话，或者重启/刷新 Codex。
-
-可选：运行安装自检。
-
-```bash
-python3 ai-work-hub-diligence/scripts/check_install.py --workspace-root "$HOME/Documents/AI Work Hub"
-```
-
-如果已经配置过飞书 / Lark CLI，可以顺便验证登录态：
+可选安装检查：
 
 ```bash
 python3 ai-work-hub-diligence/scripts/check_install.py \
-  --workspace-root "$HOME/Documents/AI Work Hub" \
-  --verify-feishu-auth
+  --workspace-root "$HOME/Documents/AI Work Hub"
 ```
 
-## 可选：Memory Graph 联动
+## 怎么使用
 
-如果希望实现跨项目联想和赛道认知沉淀，可以安装配套的公开 skill：
+首次看 BP：
+
+```text
+使用 $ai-work-hub-diligence 看这个 BP，创建项目文件夹，给出初步投资判断和简短问题清单。
+```
+
+补充材料：
+
+```text
+使用 $ai-work-hub-diligence 读取这个飞书纪要链接，包括原文转录，然后更新同一份项目判断和核心 todo。
+```
+
+准备访谈：
+
+```text
+使用 $ai-work-hub-diligence 为这个项目准备一份聚焦的客户访谈问题清单。
+```
+
+只在对话中判断：
+
+```text
+使用 $ai-work-hub-diligence 判断这份材料，但不要生成文件。
+```
+
+## 可选 Memory Graph
+
+如果希望新项目自动联想到历史项目、反例、赛道判断、技术主题、估值锚点、重大事件和高信号人物，可以安装配套 skill：
 
 ```bash
 cd ~/Documents/skills-repos
 git clone https://github.com/guyu980/ai-work-hub-memory-graph-skill.git
-cd ai-work-hub-memory-graph-skill
-ln -s "$(pwd)/ai-work-hub-memory-graph" ~/.codex/skills/ai-work-hub-memory-graph
-python3 ai-work-hub-memory-graph/scripts/init_memory_graph.py \
+ln -s "$(pwd)/ai-work-hub-memory-graph-skill/ai-work-hub-memory-graph" \
+  ~/.codex/skills/ai-work-hub-memory-graph
+python3 ai-work-hub-memory-graph-skill/ai-work-hub-memory-graph/scripts/init_memory_graph.py \
   --workspace-root "$HOME/Documents/AI Work Hub"
 ```
 
-生成出来的 `Memory Graph/` 是本地私有知识库，不要上传到 GitHub。它用于让尽调 skill 在看新项目之前检索历史项目、赛道地图、技术主题和估值锚点，并在判断变化后更新项目卡片。
+生成的 `Memory Graph/` 是私有工作区数据，不要上传到这个公开仓库。
 
-### 4. 后续更新
+## 飞书设置
 
-进入 repo 目录后拉取最新版本：
+公开 skill 不包含任何租户凭证。首次使用时，Codex 会按照 [`feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md) 完成 CLI 安装、用户登录、最小权限申请和目标文档读取验证。
 
-```bash
-cd ~/Documents/skills-repos/ai-work-hub-diligence-skill
-git pull
-```
+## 高级部署
 
-因为安装方式是软链，`git pull` 后 Codex 读到的就是最新版，不需要重新复制文件。
+普通项目尽调只需要本地项目文件夹。只有明确需要组织共享存储、混合同步、bridge、Context Registry 或跨 Agent Context Package 时，才使用 [`advanced-deployment.md`](ai-work-hub-diligence/references/advanced-deployment.md)。
 
-### 5. 常见问题
+## 仓库边界
 
-- `Repository not found`：确认 repo 地址是否正确，或 GitHub 页面是否能打开。
-- `Permission denied`：如果使用 SSH clone，确认 SSH key；如果使用 HTTPS clone，建议直接使用上面的 HTTPS 地址。
-- `git: command not found`：先安装 Git。
-- 目标目录已存在：进入已有目录执行 `git pull`，或换一个目录重新 clone。
-- `File exists`：说明本地已有同名 skill，先备份或删除旧软链。
-- Codex 没识别：新开对话或刷新 Codex。
+这个公开仓库只包含通用机制、脚本、schema 和脱敏后的虚拟案例。不要提交真实 BP、访谈原文、客户名称、项目判断、飞书 token 或生成后的 Memory Graph 内容。
 
-## 第一次使用
+其他人通过 Pull Request 提交修改，由仓库维护者审核和合并。
 
-审阅 BP 并生成初步判断：
-
-```text
-Use $ai-work-hub-diligence to review this BP, create a project folder, and give an initial judgment plus a short question list.
-```
-
-读取飞书纪要并更新判断：
-
-```text
-Use $ai-work-hub-diligence. 这是飞书纪要链接，请读取智能纪要和原文，然后更新项目判断和核心 todo。
-```
-
-准备创始人访谈问题：
-
-```text
-Use $ai-work-hub-diligence to prepare a founder interview question list for this project.
-```
-
-只想在聊天里看结果、不生成文件：
-
-```text
-Use $ai-work-hub-diligence to review this BP. 不用生成文件，直接在聊天里告诉我判断。
-```
-
-用户确认不再推进后归档：
-
-```text
-Use $ai-work-hub-diligence. 我同意这个项目不再推进，请归档项目文件夹。
-```
-
-## 虚拟案例
-
-详见：
-
-[`examples/virtual-cases/README.zh-CN.md`](examples/virtual-cases/README.zh-CN.md)
-
-里面有五个完全虚拟、脱敏后的案例：
-
-- BP 初筛后具备继续推进价值。
-- BP 初筛后证据不足，建议不再推进。
-- BP 初筛具备推进价值，后续持续访谈和补资料，并不断更新同一个项目判断文档。
-- 补充多轮资料后进行估值校准，判断从谨慎推进变成条件推进。
-- 强技术 teaser 需要拆解榜单口径、商业证明和估值纪律。
-
-## 飞书 / Lark 配置
-
-详见：
-
-[`ai-work-hub-diligence/references/feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md)
-
-推荐每个用户在自己的工作区里安装项目本地的 `@larksuite/cli`，并完成用户身份授权。常见需要的能力包括读取文档、妙记/纪要、wiki/drive 文件，以及在用户明确要求时创建或更新飞书文档。
-
-核心原则：
-
-- 如果用户给的是飞书链接，默认读取源文件。
-- 如果是飞书智能纪要，必须尽量继续找到原文/文字记录。
-- 如果飞书文档里还有其他相关链接，继续抓取并归档。
-- 长文档先保存到本地文件，再从本地文件分析，避免终端输出被截断。
-
-## 更新这个 Skill
-
-这个 repo 应作为唯一 source of truth。
-
-修改后：
-
-```bash
-git status
-git add ai-work-hub-diligence examples README.md README.zh-CN.md LICENSE .gitignore
-git commit -m "Update diligence skill"
-git push
-```
-
-其他用户更新：
-
-```bash
-git pull
-```
-
-如果使用软链安装，`git pull` 后 Codex 读取的就是最新版。
-
-## 不要提交这些内容
-
-不要把以下内容提交到 repo：
-
-- 项目原始资料、BP、datapack、纪要原文
-- 飞书登录态、token、`.home`
-- `.tools`、`node_modules`
-- 私有交易笔记
-- 用户个人本地配置
-- 任何密钥、app secret 或凭据
-
-## 维护建议
-
-- 通用流程写进 `ai-work-hub-diligence/SKILL.md`。
-- 飞书 CLI、权限、命令细节写进 `ai-work-hub-diligence/references/feishu-cli.md`。
-- 安装、分享、协作说明写在 repo 根目录的 README 里，不放进 skill 文件夹。
-- 脱敏示例放在 `examples/virtual-cases/`，且必须明确标注为虚拟案例。
-- 用户个人偏好可以放在本地私有文件，例如 `references/local-private.md`，并保持 `.gitignore` 忽略。
-- 如果后续新增模板，可以加 `references/output-templates.md`。
-- 生成出来的 `Memory Graph/` 知识库不要放进这个 repo；这里只引用配套公开 skill。
-- 改完 skill 后，先跑校验再 push。
-
-## License
-
-MIT。详见 [`LICENSE`](LICENSE)。
+许可证：[MIT](LICENSE)
