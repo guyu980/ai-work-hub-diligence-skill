@@ -41,6 +41,25 @@ DEPRECATED_FIELDS = {
     "context_package_path",
 }
 
+OUTPUT_CATEGORIES = {
+    "01_问题清单",
+    "02_交流纪要",
+    "03_研究与分析",
+    "04_正式交付",
+}
+
+PROJECT_ROOT_DIRS = {"原始资料", "解析文本", "输出文档", "工作区"}
+
+
+def is_process_directory(name: str) -> bool:
+    lowered = name.lower()
+    return (
+        lowered in {"tmp", "临时图片", "editppt_runs", "预览", "__pycache__"}
+        or lowered.startswith(("tmp_", "可编辑ppt"))
+        or "graph_delta" in lowered
+        or any(marker in lowered for marker in ("editppt", "_ocr", "render", "ppt169"))
+    )
+
 
 def infer_workspace_root(project_dir: Path) -> Path | None:
     for parent in [project_dir, *project_dir.parents]:
@@ -98,6 +117,48 @@ def validate(project_dir: Path, workspace_root: Path | None = None) -> list[str]
         )
     if state_path.name != f"{name}_项目状态.json":
         errors.append("state filename must equal <name>_项目状态.json")
+
+    expected_direct_files = {
+        f"{name}_项目状态.json",
+        f"{name}_项目判断与todo.md",
+    }
+    if output_dir.is_dir():
+        for child in output_dir.iterdir():
+            if child.name.startswith("."):
+                continue
+            if child.is_file() and child.name not in expected_direct_files:
+                errors.append(
+                    "uncategorized output file; move it under a purpose folder: "
+                    f"输出文档/{child.name}"
+                )
+            elif child.is_dir() and child.name not in OUTPUT_CATEGORIES:
+                errors.append(
+                    "uncategorized output directory; move it under a purpose "
+                    f"folder or 工作区: 输出文档/{child.name}"
+                )
+        for path in output_dir.rglob("*"):
+            if path.name.startswith("."):
+                continue
+            if path.is_dir() and is_process_directory(path.name):
+                errors.append(
+                    "process directory belongs in project 工作区: "
+                    f"{path.relative_to(project_dir)}"
+                )
+            elif path.is_file() and path.suffix.lower() == ".py":
+                errors.append(
+                    "build script belongs in project 工作区: "
+                    f"{path.relative_to(project_dir)}"
+                )
+
+    for child in project_dir.iterdir():
+        if child.name.startswith("."):
+            continue
+        if child.is_dir() and child.name not in PROJECT_ROOT_DIRS:
+            errors.append(
+                f"non-standard project-root directory: {child.name}"
+            )
+        elif child.is_file():
+            errors.append(f"non-standard project-root file: {child.name}")
     if state.get("schema_version") != 2:
         errors.append("state schema_version must be 2")
     if state.get("type") != "project_state":

@@ -107,12 +107,18 @@ def main() -> int:
         "*Memory_Graph_delta*.json",
         "*MemoryGraph更新*.json",
         "*图谱变更*.json",
+        "*graph_delta*.json",
     )
-    for pattern in obsolete_patterns:
-        for path in projects_root.glob(f"**/输出文档/{pattern}"):
-            errors.append(
-                f"obsolete graph update artifact remains: {path.relative_to(workspace_root)}"
-            )
+    for project_dir in projects:
+        output_dir = project_dir / "输出文档"
+        if not output_dir.is_dir():
+            continue
+        for pattern in obsolete_patterns:
+            for path in output_dir.rglob(pattern):
+                errors.append(
+                    "obsolete graph update artifact remains: "
+                    f"{path.relative_to(workspace_root)}"
+                )
 
     print(
         f"Audited {len(projects)} projects, {len(state_names)} states, "

@@ -50,6 +50,11 @@ Default local object:
       输出文档/
         <项目名>_项目判断与todo.md
         <项目名>_项目状态.json
+        01_问题清单/        # 按需创建
+        02_交流纪要/        # 按需创建
+        03_研究与分析/      # 按需创建
+        04_正式交付/        # 按需创建
+      工作区/               # 按需创建；可重建的过程文件
     归档/
 ```
 
@@ -64,9 +69,10 @@ python3 <skill_dir>/scripts/init_project_state.py \
   --sector "<用户定义或默认主赛道>"
 ```
 
-The initializer creates the three standard folders, one stable running judgment,
-and one project state. It refuses to create a parallel judgment when a legacy
-non-canonical running file already exists; rename or merge that file first.
+The initializer creates the three durable folders, one stable running judgment,
+and one project state. Output subfolders and `工作区/` are created only when
+needed. It refuses to create a parallel judgment when a legacy non-canonical
+running file already exists; rename or merge that file first.
 
 For a mixed workspace, optional workspace settings live in
 `<workspace_root>/.ai-work-hub.json`:
@@ -82,7 +88,39 @@ For a mixed workspace, optional workspace settings live in
 Use exclusions only for genuine non-company objects. Do not use them to hide an
 unfinished project migration.
 
-Store originals or fetched exports in `原始资料/`; OCR, parsed text, transcripts, and public checks in `解析文本/`; judgment and deliverables in `输出文档/`.
+Store originals or fetched exports in `原始资料/`; durable OCR, parsed text,
+transcripts, and public checks in `解析文本/`. Keep only the stable judgment and
+state directly under `输出文档/`; classify other durable outputs by purpose:
+
+- `01_问题清单/`: preliminary questions, interview guides, follow-up questions,
+  and company-facing information requests;
+- `02_交流纪要/`: cleaned meeting minutes and reconstructed Q&A; raw or smart
+  minutes remain in `解析文本/`;
+- `03_研究与分析/`: deep research, valuation, financial models, cross-checks,
+  transaction reviews, and other substantive analysis;
+- `04_正式交付/`: IC memos, investment reports, decks, formal committee minutes,
+  and final external deliverables.
+
+Classify by purpose, not file extension. Do not create a separate `情况更新`
+folder: new facts update the stable judgment. If a detailed update must remain
+as a standalone workpaper, place it in `02_交流纪要/` or `03_研究与分析/`
+according to its main content.
+
+Put reproducible OCR pages, render caches, slide-build directories, temporary
+scripts, and other non-deliverable artifacts in project-level `工作区/`. Durable
+source extracts stay in `解析文本/`; final outputs stay in `输出文档/`. Agents
+should ignore `工作区/` unless a requested deliverable must be regenerated.
+
+For a legacy workspace, preview the complete move plan before applying it. The
+migrator preserves file contents, rewrites local text links and paths, and
+reports Office files that may still embed old local paths:
+
+```bash
+python3 <skill_dir>/scripts/migrate_project_layout.py \
+  --workspace-root "<workspace_root>" --all-projects
+python3 <skill_dir>/scripts/migrate_project_layout.py \
+  --workspace-root "<workspace_root>" --all-projects --apply
+```
 
 ## Run The Core Loop
 
@@ -160,13 +198,14 @@ Use listed US, A-share, or Hong Kong comps and private-market financings only wh
 Question lists are short and tied to the current proof gaps. Save each round separately, for example:
 
 ```text
-YYYY-MM-DD_初步问题清单.md
-YYYY-MM-DD_创始人访谈问题清单.md
-YYYY-MM-DD_客户访谈问题清单.md
-YYYY-MM-DD_供应商访谈问题清单.md
+输出文档/01_问题清单/YYYY-MM-DD_初步问题清单.md
+输出文档/01_问题清单/YYYY-MM-DD_创始人访谈问题清单.md
+输出文档/01_问题清单/YYYY-MM-DD_客户访谈问题清单.md
+输出文档/01_问题清单/YYYY-MM-DD_供应商访谈问题清单.md
 ```
 
-For regenerated minutes:
+Save regenerated or cleaned minutes under `输出文档/02_交流纪要/`. For these
+minutes:
 
 - follow the original conversation order unless a topic grouping is clearer;
 - preserve who asked and who answered when identifiable;
@@ -218,9 +257,11 @@ Before declaring the round complete, verify:
 4. The recommendation, participation, position, and price view do not contradict each other.
 5. Public/team/valuation checks were run only where material.
 6. Any question list or minutes file is separate and dated.
-7. Memory Graph retrieval/writeback is complete when available, or the failure is stated.
-8. Confirmed passes were archived with reopen gates; historical reviews preserve time boundaries.
-9. Project and workspace validation passed:
+7. The output root contains only the stable judgment and state; other outputs
+   are purpose-classified, and reproducible artifacts are isolated in `工作区/`.
+8. Memory Graph retrieval/writeback is complete when available, or the failure is stated.
+9. Confirmed passes were archived with reopen gates; historical reviews preserve time boundaries.
+10. Project and workspace validation passed:
 
 ```bash
 python3 <skill_dir>/scripts/validate_project.py \

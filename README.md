@@ -38,8 +38,20 @@ Default local structure:
       原始资料/
       解析文本/
       输出文档/
+        <project>_项目判断与todo.md
+        <project>_项目状态.json
+        01_问题清单/        # created on demand
+        02_交流纪要/        # created on demand
+        03_研究与分析/      # created on demand
+        04_正式交付/        # created on demand
+      工作区/               # optional reproducible process artifacts
     归档/
 ```
+
+The output root holds only the running judgment and project state. New facts
+update the running judgment instead of creating parallel "update" versions.
+Other durable outputs are grouped by purpose. OCR pages, slide-build trees,
+render caches, and similar reproducible artifacts belong in optional `工作区/`.
 
 Feishu/Lark is normally an intake source, not a storage mode. For meeting records, the workflow reads both smart minutes and the original transcript/content whenever permissions allow.
 
@@ -79,6 +91,19 @@ python3 ai-work-hub-diligence/scripts/init_project_state.py \
 python3 ai-work-hub-diligence/scripts/audit_workspace.py \
   --workspace-root "$HOME/Documents/AI Work Hub"
 ```
+
+Preview and then apply a legacy-layout migration:
+
+```bash
+python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects
+python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects --apply
+```
+
+The migrator preserves the two core files, classifies other outputs by purpose,
+and rewrites local paths and relative links in text files. It reports links
+embedded in Office files instead of rewriting those archives blindly.
 
 For workspaces that also contain funds, system designs, or other non-company
 objects under `项目/`, list only those objects in `.ai-work-hub.json`. The audit

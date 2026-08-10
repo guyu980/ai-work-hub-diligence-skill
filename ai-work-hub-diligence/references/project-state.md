@@ -21,6 +21,22 @@ The running judgment path is equally stable:
 Do not put a date in the running filename. Dates belong in question lists,
 meeting minutes, source reviews, and the running document's change log.
 
+Keep the output root intentionally sparse:
+
+```text
+输出文档/
+  <项目名>_项目判断与todo.md
+  <项目名>_项目状态.json
+  01_问题清单/       # on demand
+  02_交流纪要/       # on demand
+  03_研究与分析/     # on demand
+  04_正式交付/       # on demand
+```
+
+Project-level `工作区/` is optional and contains only reproducible process
+artifacts. It is not a source of truth and must not be used as a Memory Graph
+source reference when a durable source or final output exists.
+
 Required shape:
 
 ```json

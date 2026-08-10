@@ -38,8 +38,20 @@
       原始资料/
       解析文本/
       输出文档/
+        <项目名>_项目判断与todo.md
+        <项目名>_项目状态.json
+        01_问题清单/        # 按需创建
+        02_交流纪要/        # 按需创建
+        03_研究与分析/      # 按需创建
+        04_正式交付/        # 按需创建
+      工作区/               # 按需创建，存放可重建的过程文件
     归档/
 ```
+
+`输出文档/` 根目录只保留持续判断和项目状态。项目更新直接合并进持续
+判断，不另建“情况更新”版本；独立文件按用途归入问题清单、交流纪要、
+研究与分析或正式交付。OCR 页面、PPT 制作目录、渲染缓存等放在可选的
+`工作区/`，避免干扰日常阅读。
 
 飞书通常只是资料入口，不会因为读取链接就切换到飞书存储。读取会议纪要时，在权限允许的情况下同时读取智能纪要和原文转录；发生冲突时，以原文为准。
 
@@ -79,6 +91,18 @@ python3 ai-work-hub-diligence/scripts/init_project_state.py \
 python3 ai-work-hub-diligence/scripts/audit_workspace.py \
   --workspace-root "$HOME/Documents/AI Work Hub"
 ```
+
+迁移旧项目时先预览，再执行：
+
+```bash
+python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects
+python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
+  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects --apply
+```
+
+迁移器会保留两个核心文件，按用途整理其余输出，并重写纯文本中的本地
+路径和相对链接。Office 文件中的外部链接会被扫描并报告，但不会盲目改写。
 
 如果 `项目/` 下还存放基金、系统设计等非公司对象，只把这些对象写入
 `.ai-work-hub.json` 的排除列表。审计仍会要求其余每个项目具备标准目录、
