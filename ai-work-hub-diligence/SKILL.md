@@ -19,6 +19,7 @@ Hard requirements:
 - Keep todo short and decision-relevant.
 - Use local project storage when a workspace exists. Feishu is an intake source unless the user explicitly requests organization storage.
 - Consult and update the private Memory Graph when it exists, but do not copy private graph content into this public skill repository.
+- During new-project initialization, rename the Codex task once to exactly `Project <项目名>` as soon as the project identity is clear.
 - If the user asks for chat-only work, do not create or modify files.
 
 Before writing structured state, read `references/project-state.md`.
@@ -58,7 +59,24 @@ Default local object:
     归档/
 ```
 
-Infer the project name from the company, BP title, Feishu title, filename, or user wording. Ask one short question only if creating the wrong project is a real risk. When thread-title tooling exists, use `Project 项目名`; use the clearest Chinese name, English name, or familiar abbreviation.
+Infer the project name from the company, BP title, Feishu title, filename, or
+user wording. Ask one short question only if creating the wrong project is a
+real risk.
+
+Treat task naming as a one-time initialization action, not a per-round check.
+When the first material creates a new project, resolve the name and title the
+Codex task before broader source reading, research, or folder creation:
+
+1. If `set_thread_title` or equivalent task-title tooling is available, call it.
+2. Use exactly `Project <项目名>`, with no brackets, date, stage, or action suffix.
+3. Prefer the clearest Chinese name, English name, or familiar abbreviation.
+4. Record no separate title state and do not inspect or recheck the title on
+   later datapacks, meetings, or judgment updates.
+5. Rename again only if the user corrects the canonical project name.
+
+Do not apply this convention to cross-project batches, industry research,
+recurring reports, or skill/system maintenance. If title tooling is unavailable,
+continue the diligence and state the limitation instead of blocking the work.
 
 Initialize structured files when needed:
 

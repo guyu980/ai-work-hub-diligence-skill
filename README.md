@@ -7,6 +7,7 @@ A Codex skill for continuous startup and investment diligence. Give it a BP, Fei
 ## What You Get
 
 - A consistent project folder with original sources, parsed text, and outputs.
+- One-time task naming as `Project <project>` when a new project is initialized.
 - One running investment judgment and core todo.
 - Separate dated question lists and cleaned meeting minutes.
 - Source labels that distinguish verified facts, company claims, and open questions.
@@ -21,6 +22,7 @@ The default output is decision-oriented: `invest`, `continue`, `pause`, or `pass
 
 ```text
 New material
+  -> infer the project name and rename the task
   -> locate or create the project
   -> archive and read the source
   -> compare with the current judgment
