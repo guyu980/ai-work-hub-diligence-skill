@@ -14,6 +14,7 @@ A Codex skill for continuous startup and investment diligence. Give it a BP, Fei
 - Public and technical-team checks when they can change the decision.
 - Practical valuation calibration using relevant listed and private comparables.
 - Retrieval from and writeback to the optional private AI Work Hub Memory Graph.
+- Automatic routing of reusable non-project interviews and thematic materials without creating false projects.
 - Archiving and reopen gates for confirmed passes.
 
 The default output is decision-oriented: `invest`, `continue`, `pause`, or `pass`, followed by the few reasons and next actions that matter.
@@ -22,7 +23,8 @@ The default output is decision-oriented: `invest`, `continue`, `pause`, or `pass
 
 ```text
 New material
-  -> infer the project name and rename the task
+  -> classify project material versus a non-project knowledge source
+  -> for project material, infer the project name and rename the task
   -> locate or create the project
   -> archive and read the source
   -> compare with the current judgment
@@ -56,6 +58,8 @@ Other durable outputs are grouped by purpose. OCR pages, slide-build trees,
 render caches, and similar reproducible artifacts belong in optional `工作区/`.
 
 Feishu/Lark is normally an intake source, not a storage mode. For meeting records, the workflow reads both smart minutes and the original transcript/content whenever permissions allow.
+
+An expert interview, course, podcast, meeting, or thematic document that is not owned by one company does not enter `项目/`. The `ai-work-hub-memory-graph` Skill lightly analyzes it under `知识来源/`; this Skill takes over only when it changes a specific project judgment.
 
 ## Install From GitHub
 
@@ -136,6 +140,12 @@ Chat only:
 
 ```text
 Use $ai-work-hub-diligence to assess this material, but do not create files.
+```
+
+For a non-project expert interview, use the companion Memory Graph Skill:
+
+```text
+Use $ai-work-hub-memory-graph to organize this expert interview. It is not owned by one project; preserve the original, create one core note, and route only reusable changes into the graph.
 ```
 
 ## Optional Memory Graph

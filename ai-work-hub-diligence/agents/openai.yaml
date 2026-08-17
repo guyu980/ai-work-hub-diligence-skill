@@ -1,4 +1,4 @@
 interface:
   display_name: "AI Work Hub Diligence"
-  short_description: "Continuous source-first investment diligence"
-  default_prompt: "Use $ai-work-hub-diligence to read this project material, update the single running investment judgment and core todo, preserve source quality, and connect only reusable learning to the private Memory Graph."
+  short_description: "Continuous source-first company diligence"
+  default_prompt: "Use $ai-work-hub-diligence when this material belongs to one company; update its single running investment judgment and route reusable learning to the private Memory Graph."

@@ -19,6 +19,7 @@ Hard requirements:
 - Keep todo short and decision-relevant.
 - Use local project storage when a workspace exists. Feishu is an intake source unless the user explicitly requests organization storage.
 - Consult and update the private Memory Graph when it exists, but do not copy private graph content into this public skill repository.
+- Confirm that the input is owned by one company before initializing a project. Route reusable cross-project expert interviews and thematic materials through the Memory Graph knowledge-source workflow instead.
 - During new-project initialization, rename the Codex task once to exactly `Project <项目名>` as soon as the project identity is clear.
 - If the user asks for chat-only work, do not create or modify files.
 
@@ -29,6 +30,7 @@ Before writing structured state, read `references/project-state.md`.
 | Input or request | Required action |
 | --- | --- |
 | First BP or project material | Initialize project, archive source, make an initial judgment, create a short preliminary question list |
+| Non-project expert interview or thematic material | Do not initialize a project; route to `ai-work-hub-memory-graph` and `知识来源/` |
 | Follow-up datapack or note | Compare with prior state, update the same judgment/todo, record only material deltas |
 | Feishu/Lark link | Follow `references/feishu-cli.md`; save smart minutes and original content, including relevant nested links |
 | Founder, customer, supplier, or expert interview prep | Create a new focused, dated question file |
@@ -39,6 +41,8 @@ Before writing structured state, read `references/project-state.md`.
 ## Resolve The Workspace And Project
 
 Confirm the workspace root on first use when it is not already clear. Never hardcode a personal path in the public workflow.
+
+Before resolving a project name, check ownership. A source is project material when its main purpose is to evaluate or update one named company, including a customer, supplier, founder, team, or expert call conducted for that company. A cross-project expert interview, course, podcast, meeting, or thematic document with reusable value belongs in `知识来源/` through `ai-work-hub-memory-graph`. A formal systematic thematic report belongs in `行业研究/` through `ai-work-hub-deep-research`. Do not create a project folder or rename the task for either non-project case.
 
 Default local object:
 
@@ -144,7 +148,7 @@ python3 <skill_dir>/scripts/migrate_project_layout.py \
 
 For every substantive project input:
 
-1. Locate the project and read the current judgment, state, and latest relevant sources.
+1. Locate the project and read the current judgment, state, latest relevant sources, and any linked `知识来源/` core notes surfaced by Memory Graph retrieval.
 2. Archive or fetch the new source. Read tables, appendices, original transcript, and relevant nested links when available.
 3. Identify what is genuinely new, what confirms the prior view, and what contradicts it.
 4. Run only the triggered checks: public facts, technical team, valuation, historical review, or transaction detail.
@@ -249,6 +253,7 @@ Before finalizing, retrieve compact Memory Graph matches and inspect the source 
 After the project view changes:
 
 - sync the project card;
+- link relevant non-project source notes when they materially support the judgment; do not copy their full content into the project;
 - put reusable cross-project learning in the most direct sector map, technical theme, valuation anchor, high-signal person card, or durable event card;
 - keep company-specific details in the project object;
 - rebuild indexes instead of hand-editing JSONL files.
