@@ -1,6 +1,6 @@
 ---
 name: ai-work-hub-diligence
-description: Use for live or historical investment diligence when the user provides a BP, teaser, datapack, financial model, Feishu/Lark link, transcript, meeting note, public source, or any project update. Creates or locates the project folder, reads original sources, maintains one evolving investment judgment and core todo, generates dated question lists or cleaned minutes when requested, checks relevant public and technical-team facts, calibrates valuation when useful, links reusable learning to a private Memory Graph, and archives confirmed passes.
+description: Continuous investment diligence for a single company using BPs, datapacks, Feishu originals and project updates. Maintain one evolving judgment and focused next actions, prepare dated questions or minutes, and connect relevant prior knowledge. Route non-project expert interviews and thematic sources to ai-work-hub-memory-graph.
 ---
 
 # AI Work Hub Diligence
@@ -24,6 +24,19 @@ Hard requirements:
 - If the user asks for chat-only work, do not create or modify files.
 
 Before writing structured state, read `references/project-state.md`.
+
+## Decision-First Depth
+
+Spend effort on the variables that can change the user's current decision. A first screen needs a clear business/technical thesis, its strongest counterargument, price context when relevant, and the next useful question, not a complete transaction audit.
+
+- Use BP, interview and datapack figures as attributed company inputs. Accurate attribution does not require independent verification of every figure. Lack of independent confirmation alone is not an adverse finding or a mandatory todo.
+- Deepen a check when a material contradiction, implausible claim or unresolved decision variable could change the action. Specify what the answer changes; prefer existing evidence or a focused question before requesting extensive records.
+- Do not default to contracts, payment trails, full customer lists, legal/IP audits, benchmark reproduction or site testing. These may be appropriate for a specific material issue or an explicitly requested later-stage workstream.
+- Distinguish analyst-proposed price/operating thresholds from observed evidence. Explain their basis; use ranges or qualitative milestones when precision is unsupported.
+- Keep internal analysis as deep as needed, but expose only the decisive reasoning. Risks need not all become tasks; defer low-value work, especially for paused or passed projects. No useful next action is a valid outcome.
+- On a material update, reconsider the central thesis and strongest opposing explanation before editing the prior conclusion. On a minor update, revise only the affected content. Do not repeat background searches or every workflow check on every turn.
+
+Public skills stay model-agnostic. Use stronger reasoning or independent research in parallel only where the question benefits; the owning agent integrates the conclusion and writes shared project/graph files.
 
 ## Route The Request
 
@@ -151,10 +164,10 @@ For every substantive project input:
 1. Locate the project and read the current judgment, state, latest relevant sources, and any linked `知识来源/` core notes surfaced by Memory Graph retrieval.
 2. Archive or fetch the new source. Read tables, appendices, original transcript, and relevant nested links when available.
 3. Identify what is genuinely new, what confirms the prior view, and what contradicts it.
-4. Run only the triggered checks: public facts, technical team, valuation, historical review, or transaction detail.
+4. Resolve the few decision-relevant uncertainties. Run public, team, valuation or transaction work only to the depth justified by this stage and question.
 5. Update the same running judgment and core todo. Add a short dated change log.
 6. Update the project state after the human-readable judgment is final. Keep the few decision-relevant facts and source boundaries in the running judgment.
-7. Retrieve from and sync the Memory Graph when available; rebuild and validate its generated indexes.
+7. Use the relevant Memory Graph context before final judgment. If durable knowledge changed, update the card's substance as well as its state fields, then rebuild and validate once after the batch.
 8. Reply with the current decision, why, what changed, and the few next actions that matter.
 
 Do not turn the workflow into source-by-source narration or exhaustive claim extraction.
@@ -167,7 +180,7 @@ Use these source labels in readable outputs:
 - `公司/来源自述`: stated in a BP, datapack, minutes, founder/FA message, or unverified model.
 - `待核验`: ambiguous, missing, stale, inconsistent, or dependent on follow-up.
 
-Smart minutes are navigation, not final evidence. Logos, demos, POCs, pipeline, advisor names, benchmark claims, financing quotes, and company forecasts retain their actual source status until verified.
+Smart minutes are navigation, not final evidence. Keep company claims and forecasts attributed, without treating attribution as a request to verify everything. A faithful transcript proves what was said, not the underlying operating result. Use source labels where they matter; avoid repetitive disclaimers for every sentence.
 
 For public and technical-team checks, read `references/technical-team.md`. Research identifiable technical leaders when their background can change confidence in the claimed technology; keep the assessment inside the running judgment.
 
@@ -213,11 +226,11 @@ Read `references/valuation.md` when price is decision-relevant.
 
 Default capture is light: date, round/stage, stated valuation, financing amount, source, operating maturity, and comparability note. Separate company/market price from the internal reasonable price.
 
-Use listed US, A-share, or Hong Kong comps and private-market financings only when business model, stage, growth, margins, defensibility, and capital intensity are comparable. Deep transaction verification is reserved for ownership math, portfolio marking, returns, closing/legal risk, source conflicts, or an explicit transaction review.
+Use the most informative listed or private comps, not an exhaustive survey of all markets. Explain business-model and maturity differences and what drives the plausible price range. Transaction documents are needed only where a specific uncertainty affects ownership math, marking, returns or closing/legal risk, or for an explicit transaction review.
 
 ## Follow-Up Deliverables
 
-Question lists are short and tied to the current proof gaps. Save each round separately, for example:
+Question lists prioritize questions that could change the next action. Do not convert all risks into document requests; use stage-appropriate questions in professional language. Save each round separately, for example:
 
 ```text
 输出文档/01_问题清单/YYYY-MM-DD_初步问题清单.md
@@ -252,11 +265,12 @@ Before finalizing, retrieve compact Memory Graph matches and inspect the source 
 
 After the project view changes:
 
-- sync the project card;
+- update the project card's current thesis, decisive facts and next signals, then sync its state fields; the sync script does not rewrite the body;
 - link relevant non-project source notes when they materially support the judgment; do not copy their full content into the project;
 - put reusable cross-project learning in the most direct sector map, technical theme, valuation anchor, high-signal person card, or durable event card;
 - keep company-specific details in the project object;
-- rebuild indexes instead of hand-editing JSONL files.
+- rewrite current understanding in affected higher-level objects when the conclusion changes; a dated news append alone is not a thesis update;
+- use `sync_project.py --skip-rebuild` when processing several projects, then rebuild and validate once instead of hand-editing JSONL files.
 
 Do not create a separate thesis ledger. Reusable investment views belong in sector maps, technical themes, valuation anchors, project counterexamples, or this skill's decision rules.
 
@@ -284,12 +298,10 @@ Before declaring the round complete, verify:
    are purpose-classified, and reproducible artifacts are isolated in `工作区/`.
 8. Memory Graph retrieval/writeback is complete when available, or the failure is stated.
 9. Confirmed passes were archived with reopen gates; historical reviews preserve time boundaries.
-10. Project and workspace validation passed:
+10. Validate the changed project and affected links/state. Reserve a full workspace audit for maintenance, migrations or cross-project changes; unrelated pre-existing errors do not justify expanding a normal diligence turn.
 
 ```bash
 python3 <skill_dir>/scripts/validate_project.py \
   --workspace-root "<workspace_root>" \
   --project-dir "<project_dir>"
-python3 <skill_dir>/scripts/audit_workspace.py \
-  --workspace-root "<workspace_root>"
 ```

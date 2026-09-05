@@ -1,8 +1,8 @@
 # Valuation Calibration
 
-Trigger when materials mention valuation, financing amount, target ownership, entry price, revenue multiple, ARR, profit, order book, or when the user asks whether the price is attractive.
+Capture stated price and financing lightly when supplied. Expand calibration when price could change the decision or the user asks for it; a mention of revenue or financing alone does not trigger a full valuation exercise.
 
-Use three types of anchors:
+Choose informative anchors from these types, without requiring all three:
 
 1. Relevant listed companies in the US, A-share, or Hong Kong markets.
 2. Private-market transactions with adequate source quality.
@@ -18,5 +18,6 @@ Default record:
 
 Keep observed or company-stated price separate from the internal reasonable price and acceptable entry range.
 
-Do not routinely inspect agreements, payment status,工商 changes, or exact closing mechanics. Deepen verification only when it affects ownership, portfolio marking, return math, closing/legal risk, source conflicts, or the active investment decision.
+Explain which operating assumptions support an internal price range. Do not invent a precise acceptable valuation by simply discounting the asking price. Label analyst assumptions and use sensitivity only for material drivers.
 
+Do not routinely inspect agreements, payment status,工商 changes, or exact closing mechanics. Even an active investment discussion is not by itself a trigger: deepen only when a specific uncertainty affects ownership, marking, return math or closing/legal risk, or when the user requests transaction review.

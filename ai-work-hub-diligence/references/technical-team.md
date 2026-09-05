@@ -20,7 +20,6 @@ Write a compact assessment into `团队技术背景与可信度` in the running 
 - 对投资判断的影响: 上修 / 中性 / 下修，以及原因。
 ```
 
-Common risks include decorative advisors, unclear full-time commitment, employer/IP overlap, exaggerated lab affiliation, unrelated or stale research, ambiguous authorship, and a missing code footprint for code-heavy claims.
+Investigate identity or affiliation conflicts when material. Missing public code, a sparse publication record or an unanswered biography detail alone does not imply weak capability or trigger an IP/employment audit. Judge the technical contribution's relevance to the product; legal documents or reproduction work are not routine background-check requirements.
 
 Create a separate person card in Memory Graph only when the person has reusable industry standing beyond this single project.
-

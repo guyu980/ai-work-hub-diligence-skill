@@ -360,6 +360,8 @@ def text_files(workspace_root: Path, projects: list[Path]) -> list[Path]:
     values: list[Path] = []
     for root in roots:
         for path in root.rglob("*"):
+            if path.is_relative_to(memory_root / "00_索引"):
+                continue
             if not path.is_file() or path.suffix.lower() not in TEXT_SUFFIXES:
                 continue
             if any(part in SKIP_PARTS for part in path.parts):
