@@ -19,12 +19,18 @@ A Codex skill for continuous startup and investment diligence. Give it a BP, Fei
 
 The default output is decision-oriented: `invest`, `continue`, `pause`, or `pass`, followed by the few reasons and next actions that matter.
 
+## Depth And Effort
+
+Go deep on the decisive business, technical and price questions, not every possible risk. Use attributed company figures for screening; request additional evidence only for a material uncertainty that can change the next action. Initial screens do not default to transaction audits, bank records or engineering tests. Important updates revisit the thesis; minor updates change only the affected content. Validate the changed project, reserving full-workspace audits for maintenance.
+
+The skill is model-agnostic; select models in your runtime settings.
+
 ## Default Workflow
 
 ```text
 New material
   -> classify project material versus a non-project knowledge source
-  -> for project material, infer the project name and rename the task
+  -> for a new project only, infer the name and rename the task
   -> locate or create the project
   -> archive and read the source
   -> compare with the current judgment
