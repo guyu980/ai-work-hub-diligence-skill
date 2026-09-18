@@ -84,16 +84,36 @@ Treat task naming as a one-time initialization action, not a per-round check.
 When the first material creates a new project, resolve the name and title the
 Codex task before broader source reading, research, or folder creation:
 
-1. If `set_thread_title` or equivalent task-title tooling is available, call it.
-2. Use exactly `Project <项目名>`, with no brackets, date, stage, or action suffix.
-3. Prefer the clearest Chinese name, English name, or familiar abbreviation.
-4. Record no separate title state and do not inspect or recheck the title on
-   later datapacks, meetings, or judgment updates.
-5. Rename again only if the user corrects the canonical project name.
+1. Use exactly `Project <项目名>`, with no brackets, date, stage, or action suffix.
+   Prefer the clearest Chinese name, English name, or familiar abbreviation.
+2. First use `set_thread_title` or equivalent dedicated task-title tooling.
+3. If the dedicated tool is absent or cannot perform the rename, use the
+   [official Codex App Server](https://learn.chatgpt.com/docs/app-server):
+   `thread/name/set` with `{"threadId":"<current_thread_id>","name":"Project <项目名>"}`.
+   Get the current thread ID from trusted runtime/session context, not a title
+   match or a guess. Use the current user's session store; a local fallback is
+   `codex app-server` over stdio with the same `CODEX_HOME`. On a new connection,
+   send `initialize` with `clientInfo` (`name` and `version`), wait for its
+   response, then send the `initialized` notification before thread requests.
+4. After either route, read back the title through a dedicated read tool or
+   `thread/read` with `{"threadId":"<current_thread_id>","includeTurns":false}`.
+   Confirm `thread.name` exactly matches the requested title; a write response
+   alone is not confirmation. Renaming a persisted thread does not require
+   `thread/resume`, a new turn, or direct edits to Codex database/session files.
+
+Report naming as unavailable only after checking both the dedicated tool and
+official App Server routes; missing UI controls or a missing title tool alone
+is not enough. Respect permission boundaries. If neither route is usable,
+state the specific limitation and continue diligence. If the write succeeded
+but readback is unavailable or mismatched, report the title as unconfirmed,
+not successfully renamed.
+
+Record no separate title state and do not inspect or recheck the title on
+later datapacks, meetings, or judgment updates. Rename again only if the user
+corrects the canonical project name.
 
 Do not apply this convention to cross-project batches, industry research,
-recurring reports, or skill/system maintenance. If title tooling is unavailable,
-continue the diligence and state the limitation instead of blocking the work.
+recurring reports, or skill/system maintenance.
 
 Initialize structured files when needed:
 
