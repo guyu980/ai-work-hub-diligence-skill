@@ -39,6 +39,11 @@ New material
   -> sync reusable learning to Memory Graph
 ```
 
+Task naming uses a dedicated title tool first, then the official Codex App Server
+(`thread/name/set`) as a fallback, followed by title readback. Only report a
+limitation after checking both routes. This is an initialization action, not a
+title check on every update.
+
 Default local structure:
 
 ```text
