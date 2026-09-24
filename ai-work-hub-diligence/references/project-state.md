@@ -129,6 +129,8 @@ later results to make the original decision look obvious.
 
 ## Memory Graph
 
+Keep `summary` about the company's current business/investment thesis, not only the latest fund, legal or reporting task. The graph card links the running judgment for those details. `related_projects` means relevant connections, not automatic financial comparables; explain analogy and limits in Markdown links. Use the Memory Graph Skill's compact header and shared batch writer. Sector/valuation pages do not independently maintain current project decisions or price thresholds.
+
 Sync the project state and project card after the running judgment changes.
 Write only reusable cross-project learning to the most direct sector, technical,
 valuation, event, or person object. Generated JSONL indexes are caches and must

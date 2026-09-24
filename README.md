@@ -161,6 +161,8 @@ Use $ai-work-hub-memory-graph to organize this expert interview. It is not owned
 
 ## Optional Memory Graph
 
+The graph keeps a compact current company view and reusable lessons, not another live transaction model. Sector pages link current project decisions; valuation pages keep dated, comparable observations. Shared writeback uses the Memory Graph Skill's hash-checked batch writer to avoid concurrent report updates overwriting one another. Existing fund, legal and portfolio tasks retain their own workpapers without restarting screening.
+
 Install the companion skill when you want new projects to recall prior projects, counterexamples, sector views, technical themes, valuation anchors, durable events, and high-signal people:
 
 ```bash
