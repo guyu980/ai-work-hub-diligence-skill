@@ -49,6 +49,7 @@ Public skills stay model-agnostic. Use stronger reasoning or independent researc
 | Founder, customer, supplier, or expert interview prep | Create a new focused, dated question file |
 | Regenerate minutes | Reconstruct questions and answers from the original transcript; summarize only where useful |
 | Historical invested or passed project | Follow `references/historical-review.md`; separate decision-time evidence from later outcomes |
+| Existing investment, fund vehicle, deal terms or portfolio update | Keep the current business judgment as the baseline; do the requested operating/transaction work without restarting BP screening. Detailed budgets, holdings and clauses stay in project/fund papers |
 | Confirmed pass | Record reopen gates, move the project under `项目/归档/`, and keep it searchable |
 
 ## Resolve The Workspace And Project
@@ -212,8 +213,7 @@ The running judgment should normally contain:
 当前一句话判断
 项目核心逻辑
 Memory Graph 联想
-已核验信息
-公司/来源自述
+关键事实与经营情况（期间、实际/预测、来源就地标明）
 团队技术背景与可信度
 估值与融资
 主要风险与待核验
@@ -223,6 +223,8 @@ Memory Graph 联想
 ```
 
 The exact sections may follow the existing project file. Do not create parallel versions merely to match this outline.
+
+Keep the business thesis distinct from the latest task. A fund-budget or legal-clause update must not replace company positioning in the project summary. Selected metrics use comparable periods, units and actual/forecast labels; do not duplicate a topic under separate source-tier narratives or build a claim-by-claim ledger.
 
 Lead with one of:
 
@@ -285,12 +287,14 @@ Before finalizing, retrieve compact Memory Graph matches and inspect the source 
 
 After the project view changes:
 
-- update the project card's current thesis, decisive facts and next signals, then sync its state fields; the sync script does not rewrite the body;
+- refresh the compact project header from finalized state with `sync_project.py --skip-rebuild`, then reread the card and prepare its current thesis, decisive facts and next signals; sync does not rewrite prose;
 - link relevant non-project source notes when they materially support the judgment; do not copy their full content into the project;
 - put reusable cross-project learning in the most direct sector map, technical theme, valuation anchor, high-signal person card, or durable event card;
 - keep company-specific details in the project object;
 - rewrite current understanding in affected higher-level objects when the conclusion changes; a dated news append alone is not a thesis update;
-- use `sync_project.py --skip-rebuild` when processing several projects, then rebuild and validate once instead of hand-editing JSONL files.
+- apply content through the companion `write_graph.py` batch writer with hashes captured when reading; it serializes shared writes, rejects stale versions and rebuilds once. On conflict reread and merge, not overwrite. Validate and read back affected reasoning afterward;
+- sector/theme pages link the authoritative project judgment instead of repeating current participation or price thresholds. Valuation pages retain dated comparable observations, not a second live transaction model;
+- when a new public signal conflicts with the current thesis, state the affected assumption and useful reassessment action. Do not silently change a formal decision or revive an archived project.
 
 Do not create a separate thesis ledger. Reusable investment views belong in sector maps, technical themes, valuation anchors, project counterexamples, or this skill's decision rules.
 
