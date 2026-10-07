@@ -1,186 +1,67 @@
-# AI Work Hub 投资尽调 Skill
+# AI Work Hub Diligence
 
 [English](README.md)
 
-这是一个面向连续投资判断的 Codex skill。把 BP、飞书链接、datapack、访谈纪要、原文转录、财务模型或其他项目更新交给它，它会持续维护同一份项目判断，而不是每轮生成互相割裂的新结论。
+**持续项目判断**。把 BP、datapack、访谈和项目更新接到同一份投资判断。首次给材料即可建档，后续补资料持续更新，而不是每轮另写一份结论。
 
-## 它会做什么
+## 安装与更新
 
-- 建立统一的项目文件夹，保存原始资料、解析文本和输出文档。
-- 新项目初始化时一次性将任务命名为 `Project <项目名>`。
-- 维护一份持续更新的投资判断和核心 todo。
-- 每轮问题清单、访谈提纲和重整纪要单独生成带日期的文件。
-- 区分已核验信息、公司/来源自述和待核验事项。
-- 在可能改变判断时，查询公开信息和核心技术团队背景。
-- 在价格重要时，参考合适的美股、A 股、港股和一级市场可比。
-- 可选连接本地私有的 AI Work Hub Memory Graph，调用历史项目和跨项目认知。
-- 自动识别非项目专家访谈或主题资料，并转交知识来源流程，不误建项目。
-- 用户确认不投后归档项目，并保留重新打开的条件。
-
-默认输出以投资决策为中心：`投`、`继续推进`、`暂缓`或`不投`，随后说明最重要的事实、风险和下一步。
-
-## 分析尺度
-
-决定性商业、技术与价格问题要深入，其他细节按需展开。初筛可使用注明来源的公司数据；只有不确定性足以改变下一步行动时，才追加必要核查。不默认索取银行流水、全套协议或安排工程测试。重要更新重新审视投资逻辑，普通更新只改受影响内容；日常校验本次项目，全工作区审计用于维护。
-
-Skill 不绑定特定模型，模型选择放在运行配置中。
-
-## 默认工作流
-
-```text
-收到新材料
-  -> 先判断是项目材料还是非项目知识来源
-  -> 首次创建项目时：识别项目名并一次性重命名任务
-  -> 找到或创建项目
-  -> 归档并阅读原文
-  -> 与当前判断比较
-  -> 按需做公开、团队、估值检查
-  -> 更新同一份判断和核心 todo
-  -> 将可复用增量同步到 Memory Graph
-```
-
-任务改名按“专用工具 → 官方 Codex App Server（`thread/name/set`）备用入口 →
-读回确认”执行；检查两个入口后仍不可用才报告限制。这只在首次建档时执行，
-后续更新不重复检查标题。
-
-默认本地结构：
-
-```text
-<工作区根目录>/
-  项目/
-    <项目名>/
-      原始资料/
-      解析文本/
-      输出文档/
-        <项目名>_项目判断与todo.md
-        <项目名>_项目状态.json
-        01_问题清单/        # 按需创建
-        02_交流纪要/        # 按需创建
-        03_研究与分析/      # 按需创建
-        04_正式交付/        # 按需创建
-      工作区/               # 按需创建，存放可重建的过程文件
-    归档/
-```
-
-`输出文档/` 根目录只保留持续判断和项目状态。项目更新直接合并进持续
-判断，不另建“情况更新”版本；独立文件按用途归入问题清单、交流纪要、
-研究与分析或正式交付。OCR 页面、PPT 制作目录、渲染缓存等放在可选的
-`工作区/`，避免干扰日常阅读。
-
-飞书通常只是资料入口，不会因为读取链接就切换到飞书存储。读取会议纪要时，在权限允许的情况下同时读取智能纪要和原文转录；发生冲突时，以原文为准。
-
-不专属于单一公司的专家访谈、课程、播客、会议记录或主题材料不进入 `项目/`。它们由 `ai-work-hub-memory-graph` 轻量整理到 `知识来源/`；只有涉及具体项目判断时才由本 Skill 接手。
-
-## 通过 GitHub 安装
+也可以直接让 Codex 从此 GitHub 仓库安装 Skill，并先检查是否已有安装。推荐 Git 克隆加单个软链接，让自用版和分享版使用同一源码：
 
 ```bash
 mkdir -p ~/Documents/skills-repos ~/.codex/skills
 cd ~/Documents/skills-repos
 git clone https://github.com/guyu980/ai-work-hub-diligence-skill.git
-ln -s "$(pwd)/ai-work-hub-diligence-skill/ai-work-hub-diligence" \
-  ~/.codex/skills/ai-work-hub-diligence
+ln -s "$(pwd)/ai-work-hub-diligence-skill/ai-work-hub-diligence" ~/.codex/skills/ai-work-hub-diligence
 ```
 
-如果目标路径已经存在，先确认它是旧副本、备份还是符号链接，再决定如何替换。采用 Git clone 加符号链接后，更新只需要：
+已有同名目录时先检查，不覆盖安装，避免出现重复 Skill。Python 脚本需要 Python 3.10+；Graph 共享锁支持 macOS/Linux。安装后重新加载 Codex。更新时：
 
 ```bash
 cd ~/Documents/skills-repos/ai-work-hub-diligence-skill
 git pull --ff-only
 ```
 
-如果 Codex 没有立即显示该 skill，重新加载或重启 Codex。
+软链接立即使用同一份代码，无需复制另一份 Skill。私人工作区与仓库分开。
 
-可选安装检查：
+## 日常使用
 
-```bash
-python3 ai-work-hub-diligence/scripts/check_install.py \
-  --workspace-root "$HOME/Documents/AI Work Hub"
-```
-
-初始化项目或检查整个工作区：
-
-```bash
-python3 ai-work-hub-diligence/scripts/init_project_state.py \
-  --workspace-root "$HOME/Documents/AI Work Hub" \
-  --project-name "示例项目" \
-  --sector "AI原生应用与工作流"
-python3 ai-work-hub-diligence/scripts/audit_workspace.py \
-  --workspace-root "$HOME/Documents/AI Work Hub"
-```
-
-迁移旧项目时先预览，再执行：
-
-```bash
-python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
-  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects
-python3 ai-work-hub-diligence/scripts/migrate_project_layout.py \
-  --workspace-root "$HOME/Documents/AI Work Hub" --all-projects --apply
-```
-
-迁移器会保留两个核心文件，按用途整理其余输出，并重写纯文本中的本地
-路径和相对链接。Office 文件中的外部链接会被扫描并报告，但不会盲目改写。
-
-如果 `项目/` 下还存放基金、系统设计等非公司对象，只把这些对象写入
-`.ai-work-hub.json` 的排除列表。审计仍会要求其余每个项目具备标准目录、
-唯一持续判断和唯一项目状态，排除项不能用来隐藏未迁移项目。
-
-## 怎么使用
-
-首次看 BP：
+直接发送 BP 或项目相关材料，也可明确写：
 
 ```text
-使用 $ai-work-hub-diligence 看这个 BP，创建项目文件夹，给出初步投资判断和简短问题清单。
+用 $ai-work-hub-diligence 看这个 BP，建立项目并给初步判断和简短问题清单。
+这是后续飞书交流链接，请读原文并更新同一份判断和核心 todo。
+为这个项目准备下一轮客户访谈问题。
+只在对话里分析，不生成文件。
 ```
 
-补充材料：
+首次使用确认私人工作区路径；首次新建项目将任务改名为 `Project 项目名`，之后不反复检查。默认目录：
 
 ```text
-使用 $ai-work-hub-diligence 读取这个飞书纪要链接，包括原文转录，然后更新同一份项目判断和核心 todo。
+项目/<项目名>/
+  原始资料/
+  解析文本/
+  输出文档/
+    <项目名>_项目判断与todo.md
+    <项目名>_项目状态.json
+    01_问题清单/       # 按需
+    02_交流纪要/       # 按需
+    03_研究与分析/     # 按需
+    04_正式交付/       # 按需
+  工作区/              # 可重建的过程文件，按需
+项目/归档/
 ```
 
-准备访谈：
+判断先讲业务逻辑、最有力的反对理由与下一步：投 / 继续推进 / 暂缓 / 不投。初筛可使用有来源的公司数据，不默认索取流水、协议或做工程测试。技术团队背景、估值可比和追加核查按重要性展开。确认 pass 后再归档。
 
-```text
-使用 $ai-work-hub-diligence 为这个项目准备一份聚焦的客户访谈问题清单。
-```
+飞书是资料入口，纪要会寻找原始文字记录及相关链接，不只读智能纪要。首次配置由 agent 按 [飞书 CLI 指引](ai-work-hub-diligence/references/feishu-cli.md) 协助安装、登录、申请必要权限并测试目标文档；仓库不提供凭据。
 
-只在对话中判断：
+[首次建档与改名](ai-work-hub-diligence/references/project-setup.md)保留专用工具 → 官方 App Server → 读回确认的完整流程。目录迁移和全量审计属于维护，不是每次尽调前置动作。[虚拟案例](examples/virtual-cases/README.zh-CN.md)展示初筛推进、停止跟进和多轮更新，均为脱敏虚构材料。
 
-```text
-使用 $ai-work-hub-diligence 判断这份材料，但不要生成文件。
-```
+## 三个 Skill 如何衔接
 
-非项目专家访谈应使用配套的 Memory Graph Skill：
+[尽调](https://github.com/guyu980/ai-work-hub-diligence-skill)维护单公司现行判断；[Memory Graph](https://github.com/guyu980/ai-work-hub-memory-graph-skill)整理非项目来源和跨项目记忆；[深度研究](https://github.com/guyu980/ai-work-hub-deep-research-skill)负责明确要求的正式报告。安装同伴 Skill 可以联动，也可单独使用。新闻与 GitHub 发现由已授权的自动化任务执行，Skill 本身不自动创建定时任务。
 
-```text
-使用 $ai-work-hub-memory-graph 整理这份专家访谈；它不属于单一项目。保留原文，形成核心整理，并把真正可复用的认知写回图谱。
-```
+公开仓库只保存通用机制、脚本和虚拟案例。实际项目、知识库、报告、私人关注名单、交付地址和凭据保留本地，不上传。贡献通过 PR，由维护者审阅合并。模型选择属于运行设置，Skill 不绑定某个模型。
 
-## 可选 Memory Graph
-
-图谱保存精简的公司画像、当前判断和可复用认识，不再复制一份实时交易模型。赛道页链接项目现行决定，估值页保留日期与可比口径；共享写回使用 Memory Graph 的哈希检查与批量写入，避免日报、研究与项目更新互相覆盖。已有基金、条款和投后任务保留专项底稿，不重新套用初筛流程。
-
-如果希望新项目自动联想到历史项目、反例、赛道判断、技术主题、估值锚点、重大事件和高信号人物，可以安装配套 skill：
-
-```bash
-cd ~/Documents/skills-repos
-git clone https://github.com/guyu980/ai-work-hub-memory-graph-skill.git
-ln -s "$(pwd)/ai-work-hub-memory-graph-skill/ai-work-hub-memory-graph" \
-  ~/.codex/skills/ai-work-hub-memory-graph
-python3 ai-work-hub-memory-graph-skill/ai-work-hub-memory-graph/scripts/init_memory_graph.py \
-  --workspace-root "$HOME/Documents/AI Work Hub"
-```
-
-生成的 `Memory Graph/` 是私有工作区数据，不要上传到这个公开仓库。
-
-## 飞书设置
-
-公开 skill 不包含任何租户凭证。首次使用时，Codex 会按照 [`feishu-cli.md`](ai-work-hub-diligence/references/feishu-cli.md) 完成 CLI 安装、用户登录、最小权限申请和目标文档读取验证。
-
-## 仓库边界
-
-这个公开仓库只包含通用机制、脚本、schema 和脱敏后的虚拟案例。不要提交真实 BP、访谈原文、客户名称、项目判断、飞书 token 或生成后的 Memory Graph 内容。
-
-其他人通过 Pull Request 提交修改，由仓库维护者审核和合并。
-
-许可证：[MIT](LICENSE)
+[Agent 执行入口](ai-work-hub-diligence/SKILL.md) · [MIT](LICENSE)
