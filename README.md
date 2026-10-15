@@ -39,6 +39,8 @@ Confirm an unknown private workspace path once. New projects use the task title 
 
 Lead with the business thesis, strongest counterargument and next action: invest, continue, pause or pass. Attributed company figures are valid screening inputs. Team research, comparables and further verification scale with materiality, not a default transaction or engineering audit.
 
+Questions build on known answers and the uncertainty that matters next. Live interviews use speakable main questions about concrete experiences or choices, with follow-ups triggered by the answer and realistic time for discussion. Written clarifications state the missing distinction and reuse existing material where possible. See the [question-design guide and fictional contrasts](ai-work-hub-diligence/references/interview-questions.md); coverage and question count are not measures of interview quality.
+
 For Feishu, seek original text and relevant nested links, not smart minutes alone. The agent uses the [CLI guide](ai-work-hub-diligence/references/feishu-cli.md) to help install, authenticate, request necessary scopes and test access. Credentials are not included.
 
 See [first-use setup and naming](ai-work-hub-diligence/references/project-setup.md) for dedicated tooling → official App Server → title readback, folder layout and maintenance. [Fictional cases](examples/virtual-cases/README.zh-CN.md) illustrate initial screening and iterative updates.
