@@ -54,6 +54,8 @@ git pull --ff-only
 
 判断先讲业务逻辑、最有力的反对理由与下一步：投 / 继续推进 / 暂缓 / 不投。初筛可使用有来源的公司数据，不默认索取流水、协议或做工程测试。技术团队背景、估值可比和追加核查按重要性展开。确认 pass 后再归档。
 
+问题清单从已知回答和当前关键分歧出发。口头访谈以可直接开口的主问推进，用具体经历和选择获得信息，再依回答追问；按实际交流时间安排主线与备用题。书面补充则明确缺哪项口径，优先复用现有资料。详见[问题设计方法与虚构对照](ai-work-hub-diligence/references/interview-questions.md)，不以题目多或覆盖所有风险作为质量标准。
+
 飞书是资料入口，纪要会寻找原始文字记录及相关链接，不只读智能纪要。首次配置由 agent 按 [飞书 CLI 指引](ai-work-hub-diligence/references/feishu-cli.md) 协助安装、登录、申请必要权限并测试目标文档；仓库不提供凭据。
 
 [首次建档与改名](ai-work-hub-diligence/references/project-setup.md)保留专用工具 → 官方 App Server → 读回确认的完整流程。目录迁移和全量审计属于维护，不是每次尽调前置动作。[虚拟案例](examples/virtual-cases/README.zh-CN.md)展示初筛推进、停止跟进和多轮更新，均为脱敏虚构材料。

@@ -58,7 +58,13 @@ Use stage-appropriate language:
 
 Participation clarifies, rather than duplicates, the recommendation: `领投` normally implies a standard/concentrated position; `跟投` may be standard/small; `小额 option` describes a small exposure with meaningful upside and unresolved proof, not a synonym for follow-on or staged funding. Do not add investment-purpose or funding-cadence dimensions.
 
-Questions prioritize what could change the next action. Cleaned minutes reconstruct clear questions and answers from the original, preserve speakers when known, remove filler without changing meaning, and disclose unrecoverable portions. Use the purpose-based folders in the setup reference.
+## Questions And Interviews
+
+When preparing preliminary questions, interview guides or written follow-ups, read [interview-questions.md](references/interview-questions.md). Begin with what the existing material already answers and the remaining uncertainty that could change the next action. Turn that uncertainty into a question this recipient can answer from a concrete experience, decision or comparison. A useful question gives one clear opportunity to answer; an internal list of risks is not a spoken question.
+
+For conversations, write main questions that can be read aloud, use conditional follow-ups where answers lead to different implications, and leave time to listen. Advance from known answers rather than asking for the same background again. For written company/FA requests, make the needed clarification explicit and easy to answer from existing material. Keep analyst rationale separate from recipient-facing wording; neither a fixed question count nor a mandatory field/branch for every question improves quality.
+
+Cleaned minutes reconstruct clear questions and answers from the original, preserve speakers when known, remove filler without changing meaning, and disclose unrecoverable portions. Use the purpose-based folders in the setup reference.
 
 ## Memory Linkage
 
@@ -73,6 +79,8 @@ Reusable changes belong in the relevant existing sector/theme/valuation object; 
 ## Acceptance
 
 Check the actual new source coverage, consistency of judgment/state/date, any dated deliverable and the affected links/Graph reasoning. Formatting or rereading alone does not advance the content-as-of date. State exact limitations; do not treat a plan, sync hash or successful tool call as verified analysis.
+
+For question deliverables, rehearse the main questions as a conversation: can the recipient answer them clearly, could the answers distinguish the explanations that matter, and does the priority fit the available time? Remove repeated, stacked or low-consequence questions; do not mistake a complete topic checklist for a usable interview.
 
 ```bash
 python3 <skill_dir>/scripts/validate_project.py --workspace-root "<root>" --project-dir "<project_dir>"
