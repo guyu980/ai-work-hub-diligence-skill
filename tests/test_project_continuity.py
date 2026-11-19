@@ -71,6 +71,18 @@ class ProjectContinuityTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("duplicate project state for Example", result.stdout)
 
+    def test_invalid_state_fails_cleanly_in_project_and_workspace_validation(self):
+        self.assertEqual(self.historical("invested").returncode, 0)
+        state_file = self.active / "输出文档" / "Example_项目状态.json"
+        valid = json.loads(state_file.read_text())
+        for invalid in ({}, [], dict(valid, source_refs=None, price_view=[])):
+            state_file.write_text(json.dumps(invalid))
+            for result in (self.run_cli("validate_project.py", "--project-dir", str(self.active)),
+                           self.run_cli("audit_workspace.py")):
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("FAILED", result.stdout)
+                self.assertNotIn("Traceback", result.stderr)
+
     def test_blocked_launcher_stops_before_fetch(self):
         launcher = self.root / ".tools" / "lark-workhub"
         launcher.parent.mkdir()

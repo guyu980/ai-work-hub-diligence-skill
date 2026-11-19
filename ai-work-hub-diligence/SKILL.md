@@ -23,7 +23,7 @@ Confirm an unknown workspace path on first use. Reuse known paths and project al
 
 1. Read the current judgment/state and the few relevant existing sources. Retrieve useful prior projects, mechanisms, counterexamples and prices when Memory Graph is available.
 2. Read the actual new material, reusing parsed originals. For Feishu links, read [feishu-cli.md](references/feishu-cli.md) when access/setup is needed; find original text/transcript as well as smart minutes and follow relevant nested links. State any access limit.
-3. Compare the new evidence with the live thesis and the open question it answers. Replace any superseded claim in the current view and retire the answered question. Preserve dated past judgments. A changed fact can leave the investment decision unchanged.
+3. Compare the new evidence with the live thesis and the open question it answers. On a material change, reconsider the strongest opposing explanation. Replace superseded claims in the current view, retire answered questions and preserve dated judgments. A changed fact can leave the investment decision unchanged.
 4. Resolve uncertainties only to the depth that can change the next action. Write the current view, decisive reasons and worthwhile next questions into the same judgment.
 5. Finalize the readable view, then synchronize state using [project-state.md](references/project-state.md). Record meaningful dated changes, not a transcript of every operation.
 6. Write durable learning to the optional Graph, validate this round's affected files and read back the result.

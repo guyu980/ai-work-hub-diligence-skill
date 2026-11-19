@@ -74,8 +74,8 @@ def load_state(path: Path, errors: list[str]) -> dict[str, Any]:
     except json.JSONDecodeError as exc:
         errors.append(f"invalid state JSON: {exc}")
         return {}
-    if not isinstance(value, dict):
-        errors.append("project state must be a JSON object")
+    if not isinstance(value, dict) or not value:
+        errors.append("project state must be a non-empty JSON object")
         return {}
     return value
 
@@ -167,7 +167,7 @@ def validate(project_dir: Path, workspace_root: Path | None = None) -> list[str]
         errors.append("primary_sector is required before project completion")
 
     for key, allowed in ENUMS.items():
-        if state.get(key) not in allowed:
+        if not isinstance(state.get(key), str) or state[key] not in allowed:
             errors.append(f"invalid {key}: {state.get(key)!r}")
 
     archived_location = "归档" in project_dir.parts
@@ -213,8 +213,8 @@ def validate(project_dir: Path, workspace_root: Path | None = None) -> list[str]
         if not running_path.is_file():
             errors.append(f"running judgment does not exist: {running_value}")
 
-    if workspace_root:
-        for source_ref in state.get("source_refs", []):
+    if workspace_root and isinstance(state.get("source_refs"), list):
+        for source_ref in state["source_refs"]:
             value = str(source_ref).strip()
             if not value.startswith("项目/"):
                 continue

@@ -86,11 +86,14 @@ def main() -> int:
         states = list((project_dir / "输出文档").glob("*_项目状态.json"))
         if len(states) == 1:
             try:
-                name = json.loads(states[0].read_text(encoding="utf-8"))["name"]
+                state = json.loads(states[0].read_text(encoding="utf-8"))
+                if not isinstance(state, dict) or not isinstance(state.get("name"), str):
+                    continue
+                name = state["name"]
                 if name in state_paths:
                     errors.append(f"duplicate project state for {name}: {state_paths[name]} and {states[0]}")
                 state_paths[name] = states[0]
-            except (json.JSONDecodeError, KeyError):
+            except json.JSONDecodeError:
                 pass
 
     cards, card_errors = card_names(workspace_root / "Memory Graph")
