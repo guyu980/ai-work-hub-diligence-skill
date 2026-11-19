@@ -68,7 +68,7 @@ def relative(path: Path, root: Path) -> str:
         return str(path)
 
 
-def main() -> int:
+def main(argv: list[str] | None = None, judgment_text: str | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workspace-root", required=True)
     parser.add_argument("--project-name", required=True)
@@ -91,7 +91,7 @@ def main() -> int:
         choices=["active", "archived"],
         help="Defaults from whether --project-dir is under 项目/归档/.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if "/" in args.project_name or "\\" in args.project_name:
         parser.error("project-name cannot contain path separators; use aliases")
     values = {
@@ -116,6 +116,10 @@ def main() -> int:
         if args.project_dir
         else workspace_root / "项目" / args.project_name
     )
+    projects_root = workspace_root / "项目"
+    for location in (projects_root / args.project_name, projects_root / "归档" / args.project_name):
+        if location.resolve() != project_dir.resolve() and location.is_dir():
+            parser.error(f"existing project directory at {location}; reuse its judgment and state")
     inferred_archived = "归档" in project_dir.parts
     values["project_status"] = (
         args.project_status
@@ -141,10 +145,13 @@ def main() -> int:
                 f"to {judgment_path.name} before initialization: "
                 f"{legacy_candidates[0]}"
             )
-        judgment_path.write_text(
-            JUDGMENT_TEMPLATE.format(name=args.project_name, today=str(date.today())),
-            encoding="utf-8",
-        )
+        if judgment_text is None:
+            judgment_text = JUDGMENT_TEMPLATE.format(name=args.project_name, today=str(date.today()))
+        try:
+            with judgment_path.open("x", encoding="utf-8") as file:
+                file.write(judgment_text)
+        except FileExistsError:
+            raise SystemExit(f"Judgment appeared during initialization; reopen the project: {judgment_path}")
     today = str(date.today())
     payload = {
         "schema_version": 2,
@@ -170,10 +177,11 @@ def main() -> int:
         "created_at": today,
         "updated_at": today,
     }
-    state_path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    try:
+        with state_path.open("x", encoding="utf-8") as file:
+            file.write(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
+    except FileExistsError:
+        raise SystemExit(f"Refusing to overwrite existing state: {state_path}")
     print(f"Initialized project state: {state_path}")
     return 0
 

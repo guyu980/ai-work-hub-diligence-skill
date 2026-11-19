@@ -4,11 +4,10 @@
 from __future__ import annotations
 
 import argparse
-import json
-import subprocess
-import sys
 from datetime import date
 from pathlib import Path
+
+from init_project_state import main as initialize_project
 
 
 REVIEW_TEMPLATE = """# {name}｜历史项目复盘
@@ -100,65 +99,28 @@ def main() -> int:
         process_stage = "screening"
         judgment = "历史项目；待复盘"
 
-    init_script = Path(__file__).with_name("init_project_state.py")
-    subprocess.run(
+    return initialize_project(
         [
-            sys.executable,
-            str(init_script),
-            "--workspace-root",
-            str(workspace_root),
-            "--project-name",
-            args.project_name,
-            "--project-dir",
-            str(project_dir),
-            "--sector",
-            args.sector,
-            "--intake-mode",
-            "historical_review",
-            "--historical-outcome",
-            args.outcome,
-            "--review-status",
-            "pending",
-            "--historical-decision-date",
-            args.decision_date,
-            "--review-as-of",
-            args.review_as_of,
-            "--decision",
-            decision,
-            "--process-stage",
-            process_stage,
-            "--judgment-display",
-            judgment,
+            "--workspace-root", str(workspace_root),
+            "--project-name", args.project_name,
+            "--project-dir", str(project_dir),
+            "--sector", args.sector,
+            "--intake-mode", "historical_review",
+            "--historical-outcome", args.outcome,
+            "--review-status", "pending",
+            "--historical-decision-date", args.decision_date,
+            "--review-as-of", args.review_as_of,
+            "--decision", decision,
+            "--process-stage", process_stage,
+            "--judgment-display", judgment,
         ],
-        check=True,
-    )
-    state_path = project_dir / "输出文档" / f"{args.project_name}_项目状态.json"
-    state = json.loads(state_path.read_text(encoding="utf-8"))
-    if args.outcome == "pass" and not args.reopen:
-        state["project_status"] = "archived"
-    state["running_judgment_path"] = (
-        project_dir
-        / "输出文档"
-        / f"{args.project_name}_项目判断与todo.md"
-    ).relative_to(workspace_root).as_posix()
-    state_path.write_text(
-        json.dumps(state, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
-    review_path = workspace_root / state["running_judgment_path"]
-    review_path.write_text(
-        REVIEW_TEMPLATE.format(
+        judgment_text=REVIEW_TEMPLATE.format(
             name=args.project_name,
             review_as_of=args.review_as_of,
             outcome=args.outcome,
             decision_date=args.decision_date or "待确认",
         ),
-        encoding="utf-8",
     )
-    print(f"Historical review initialized: {project_dir}")
-    print(f"Review document: {review_path}")
-    print("Separate decision-time information from later outcomes in the review.")
-    return 0
 
 
 if __name__ == "__main__":
