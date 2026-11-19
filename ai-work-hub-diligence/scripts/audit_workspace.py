@@ -77,7 +77,7 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
     projects = project_dirs(projects_root, excluded)
-    state_names: set[str] = set()
+    state_paths: dict[str, Path] = {}
 
     for project_dir in projects:
         relative = project_dir.relative_to(workspace_root).as_posix()
@@ -86,8 +86,14 @@ def main() -> int:
         states = list((project_dir / "输出文档").glob("*_项目状态.json"))
         if len(states) == 1:
             try:
-                state_names.add(json.loads(states[0].read_text(encoding="utf-8"))["name"])
-            except (json.JSONDecodeError, KeyError):
+                state = json.loads(states[0].read_text(encoding="utf-8"))
+                if not isinstance(state, dict) or not isinstance(state.get("name"), str):
+                    continue
+                name = state["name"]
+                if name in state_paths:
+                    errors.append(f"duplicate project state for {name}: {state_paths[name]} and {states[0]}")
+                state_paths[name] = states[0]
+            except json.JSONDecodeError:
                 pass
 
     cards, card_errors = card_names(workspace_root / "Memory Graph")
@@ -95,10 +101,10 @@ def main() -> int:
     for name, paths in cards.items():
         if len(paths) > 1:
             errors.append(f"duplicate project cards for {name}: {len(paths)}")
-        if name not in state_names:
+        if name not in state_paths:
             warnings.append(f"project card has no audited project state: {name}")
     if require_cards:
-        for name in sorted(state_names):
+        for name in sorted(state_paths):
             if name not in cards:
                 errors.append(f"project state has no Memory Graph card: {name}")
 
@@ -121,7 +127,7 @@ def main() -> int:
                 )
 
     print(
-        f"Audited {len(projects)} projects, {len(state_names)} states, "
+        f"Audited {len(projects)} projects, {len(state_paths)} states, "
         f"{sum(len(value) for value in cards.values())} cards; "
         f"excluded {len(excluded)} configured objects."
     )

@@ -23,7 +23,7 @@ Confirm an unknown workspace path on first use. Reuse known paths and project al
 
 1. Read the current judgment/state and the few relevant existing sources. Retrieve useful prior projects, mechanisms, counterexamples and prices when Memory Graph is available.
 2. Read the actual new material, reusing parsed originals. For Feishu links, read [feishu-cli.md](references/feishu-cli.md) when access/setup is needed; find original text/transcript as well as smart minutes and follow relevant nested links. State any access limit.
-3. Identify what reinforces, changes or challenges the thesis. On a material change reconsider the strongest opposing explanation; on a minor change edit only the affected content.
+3. Compare the new evidence with the live thesis and the open question it answers. On a material change, reconsider the strongest opposing explanation. Replace superseded claims in the current view, retire answered questions and preserve dated judgments. A changed fact can leave the investment decision unchanged.
 4. Resolve uncertainties only to the depth that can change the next action. Write the current view, decisive reasons and worthwhile next questions into the same judgment.
 5. Finalize the readable view, then synchronize state using [project-state.md](references/project-state.md). Record meaningful dated changes, not a transcript of every operation.
 6. Write durable learning to the optional Graph, validate this round's affected files and read back the result.
@@ -78,7 +78,7 @@ Reusable changes belong in the relevant existing sector/theme/valuation object; 
 
 ## Acceptance
 
-Check the actual new source coverage, consistency of judgment/state/date, any dated deliverable and the affected links/Graph reasoning. Formatting or rereading alone does not advance the content-as-of date. State exact limitations; do not treat a plan, sync hash or successful tool call as verified analysis.
+Check the actual new source coverage, consistency of judgment/state/date, any dated deliverable and the affected links/Graph reasoning. For a material follow-up, read the affected passage and next question from the project entry as a returning reader. Can they find the latest answer, its source and what would still change the action? Formatting or rereading alone does not advance the content-as-of date. State exact limitations; do not treat a plan, sync hash or successful tool call as verified analysis.
 
 For question deliverables, rehearse the main questions as a conversation: can the recipient answer them clearly, could the answers distinguish the explanations that matter, and does the priority fit the available time? Remove repeated, stacked or low-consequence questions; do not mistake a complete topic checklist for a usable interview.
 

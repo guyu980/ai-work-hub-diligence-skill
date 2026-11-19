@@ -107,6 +107,9 @@ def check_workspace(results: list[CheckResult], workspace_root: str | None) -> P
 
 
 def lark_cli_path(workspace_root: Path) -> Path:
+    wrapper = workspace_root / ".tools" / "lark-workhub"
+    if wrapper.exists() or wrapper.is_symlink():
+        return wrapper
     return workspace_root / ".tools" / "node_modules" / ".bin" / "lark-cli"
 
 
@@ -117,41 +120,25 @@ def check_feishu(results: list[CheckResult], workspace_root: Path | None, verify
 
     cli = lark_cli_path(workspace_root)
     config_dir = workspace_root / ".home" / ".lark-cli"
-    legacy_credential_dir = workspace_root / ".home" / "Library" / "Application Support" / "lark-cli"
-    user_credential_dir = Path.home() / "Library" / "Application Support" / "lark-cli"
-    if cli.exists():
-        add(results, "feishu cli", "ok", str(cli))
-    else:
-        add(results, "feishu cli", "warn", f"missing {cli}; install @larksuite/cli in <workspace_root>/.tools")
+    if not cli.is_file() or not os.access(cli, os.X_OK):
+        status = "fail" if verify_auth or feishu_url else "warn"
+        add(results, "feishu cli", status, f"missing or non-executable entry point: {cli}")
         return
 
-    if config_dir.exists():
-        add(results, "feishu config", "ok", str(config_dir))
-    else:
-        add(results, "feishu config", "warn", f"missing {config_dir}; login will create local profile state")
-
-    legacy_tokens = list(legacy_credential_dir.glob("*.enc")) if legacy_credential_dir.exists() else []
-    user_tokens = list(user_credential_dir.glob("*.enc")) if user_credential_dir.exists() else []
-    if legacy_tokens and not user_tokens:
-        add(
-            results,
-            "feishu credential path",
-            "warn",
-            "valid-looking encrypted credentials exist only under the legacy workspace-local home; "
-            "repair or link them into the real-user Application Support path before asking for re-login",
-        )
-    elif user_tokens:
-        add(results, "feishu credential path", "ok", str(user_credential_dir))
-    else:
-        add(results, "feishu credential path", "warn", "no encrypted user credential file found")
-
+    add(results, "feishu cli", "ok", str(cli))
     env = os.environ.copy()
-    env["LARKSUITE_CLI_CONFIG_DIR"] = str(config_dir)
+    if cli.name != "lark-workhub":
+        env["LARKSUITE_CLI_CONFIG_DIR"] = str(config_dir)
+        if not config_dir.exists():
+            add(results, "feishu config", "warn", f"workspace CLI profile not found: {config_dir}")
 
     if verify_auth:
         code, out = run_command([str(cli), "auth", "status", "--verify"], cwd=workspace_root, env=env, timeout=30)
         if code == 0:
             add(results, "feishu auth", "ok", "auth status verified")
+        elif code == 77:
+            add(results, "feishu auth", "fail", compact(out) or "credential store is not writable here")
+            return
         else:
             add(results, "feishu auth", "warn", compact(out))
 

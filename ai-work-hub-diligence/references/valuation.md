@@ -16,6 +16,8 @@ Default record:
 项目 / 日期 / 轮次或经营阶段 / 公司或来源给出的估值 / 融资额 / 来源口径 / 可比性说明
 ```
 
+When a comparison turns on a peer’s price or operating stage, consult that peer’s current judgment for the dated reference. If it updates an earlier comparison, revise the live comparison and retain the dated work as a snapshot.
+
 Keep observed or company-stated price separate from the internal reasonable price and acceptable entry range.
 
 Explain which operating assumptions support an internal price range. Do not invent a precise acceptable valuation by simply discounting the asking price. Label analyst assumptions and use sensitivity only for material drivers.
